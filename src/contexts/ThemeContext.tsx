@@ -21,13 +21,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     // Add fast transition class to document
     document.documentElement.classList.add('theme-transition');
     
-    // Apply theme with fast transition and fade effect for BOTH modes
+    // Apply theme with fast transition and fade effect for BOTH modes - NO CONTENT HIDING
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
       document.body.classList.remove('light-mode-fade');
       document.body.classList.add('dark-mode-fade');
       
-      // Add fast content animation to all major content containers
+      // Add subtle content animation to all major content containers - NO OPACITY CHANGES
       const contentElements = document.querySelectorAll('.card, .glass-effect, main, section, article');
       contentElements.forEach(el => {
         el.classList.remove('content-fade-in');
@@ -40,7 +40,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       document.body.classList.remove('dark-mode-fade');
       document.body.classList.add('light-mode-fade');
       
-      // Add fast content animation to all major content containers
+      // Add subtle content animation to all major content containers - NO OPACITY CHANGES
       const contentElements = document.querySelectorAll('.card, .glass-effect, main, section, article');
       contentElements.forEach(el => {
         el.classList.remove('content-fade-in');

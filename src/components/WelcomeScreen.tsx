@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Sun, Moon, ArrowRight, Building2 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
+import { MouseGlow } from '@/components/MouseGlow';
 import logo from '/public/logo.png';
 import sliderlogo from '/public/sliderlogo.png';
 
@@ -25,6 +26,9 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
         ? 'gradient-bg-dark' 
         : 'gradient-bg-light'
     } flex items-center justify-center overflow-hidden`}>
+      
+      {/* Mouse Glow Effect */}
+      <MouseGlow />
       
       {/* Animated background elements */}
       <div className="absolute inset-0">
@@ -57,8 +61,8 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
         />
       </div>
 
-      {/* Main content */}
-      <div className={`relative text-center z-10 max-w-2xl mx-auto px-6 transition-all duration-1000 ${
+      {/* Main content - NO OPACITY CHANGES ON THEME SWITCH */}
+      <div className={`relative text-center z-10 max-w-2xl mx-auto px-6 transition-all duration-1000 theme-transition ${
         isStarting ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
       }`}>
         
@@ -79,6 +83,11 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
 
         {/* Welcome text */}
         <div className="mb-12">
+          <h1 className={`text-5xl md:text-6xl font-light mb-4 tracking-wider ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
+            Welcome to
+          </h1>
           <h2 className={`text-3xl md:text-4xl font-bold mb-6 tracking-wide ${
             theme === 'dark' ? 'text-blue-300' : 'text-blue-700'
           }`}>
@@ -128,7 +137,7 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
           <div className="flex items-center justify-center space-x-4">
             <button
               onClick={toggleTheme}
-              className={`flex items-center space-x-3 px-6 py-3 rounded-xl transition-all duration-300 ${
+              className={`flex items-center space-x-3 px-6 py-3 rounded-xl transition-all duration-300 cursor-pointer ${
                 theme === 'light'
                   ? 'bg-blue-500 text-white shadow-lg scale-105'
                   : 'bg-gray-200/20 text-gray-400 hover:bg-gray-200/30'
@@ -144,7 +153,7 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
             
             <button
               onClick={toggleTheme}
-              className={`flex items-center space-x-3 px-6 py-3 rounded-xl transition-all duration-300 ${
+              className={`flex items-center space-x-3 px-6 py-3 rounded-xl transition-all duration-300 cursor-pointer ${
                 theme === 'dark'
                   ? 'bg-blue-600 text-white shadow-lg scale-105'
                   : 'bg-gray-800/20 text-gray-600 hover:bg-gray-800/30'
@@ -161,7 +170,7 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
           <button
             onClick={handleStart}
             disabled={isStarting}
-            className={`group relative px-12 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 disabled:scale-100 ${
+            className={`group relative px-12 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 disabled:scale-100 cursor-pointer ${
               theme === 'dark'
                 ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-2xl hover:shadow-blue-500/25'
                 : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-2xl hover:shadow-blue-400/25'
