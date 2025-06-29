@@ -88,10 +88,10 @@ const LoginContent = () => {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center p-6 ${theme === 'dark' ? 'gradient-bg-dark' : 'gradient-bg-light'}`}>
+    <div className={`min-h-screen flex items-center justify-center p-6 theme-transition ${theme === 'dark' ? 'gradient-bg-dark' : 'gradient-bg-light'}`}>
       <MouseGlow />
       <div className="w-full max-w-md">
-        <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-2xl">
+        <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-2xl theme-transition">
           <CardHeader className="text-center">
             <div className="flex justify-between items-center mb-4">
               <div className="flex-1"></div>
@@ -99,16 +99,16 @@ const LoginContent = () => {
               <div className="flex-1 flex justify-end">
                 <button
                   onClick={toggleTheme}
-                  className="text-gray-800 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-300 transition-colors p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700/50 cursor-pointer"
+                  className="text-gray-800 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-300 transition-colors p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700/50 cursor-pointer theme-transition"
                 >
                   {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                 </button>
               </div>
             </div>
-            <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+            <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white theme-transition">
               Chermiti Building
             </CardTitle>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-gray-600 dark:text-gray-400 theme-transition">
               Sign in to access your dashboard
             </p>
           </CardHeader>
@@ -116,14 +116,14 @@ const LoginContent = () => {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
-                <div className="flex items-center space-x-2 p-3 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg">
+                <div className="flex items-center space-x-2 p-3 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg theme-transition">
                   <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                   <span className="text-sm text-red-600 dark:text-red-400">{error}</span>
                 </div>
               )}
 
               <div>
-                <Label htmlFor="email" className="flex items-center space-x-2 text-gray-900 dark:text-blue-300 font-semibold">
+                <Label htmlFor="email" className="flex items-center space-x-2 text-gray-900 dark:text-blue-300 font-semibold theme-transition">
                   <Mail className="h-4 w-4" />
                   <span>Email Address</span>
                 </Label>
@@ -133,14 +133,14 @@ const LoginContent = () => {
                   type="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                  className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer theme-transition"
                   placeholder="Enter your email"
                   required
                 />
               </div>
 
               <div>
-                <Label htmlFor="password" className="flex items-center space-x-2 text-gray-900 dark:text-blue-300 font-semibold">
+                <Label htmlFor="password" className="flex items-center space-x-2 text-gray-900 dark:text-blue-300 font-semibold theme-transition">
                   <Lock className="h-4 w-4" />
                   <span>Password</span>
                 </Label>
@@ -150,7 +150,7 @@ const LoginContent = () => {
                   type="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                  className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer theme-transition"
                   placeholder="Enter your password"
                   required
                 />
@@ -158,7 +158,7 @@ const LoginContent = () => {
 
               <Button 
                 type="submit" 
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 cursor-pointer"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 cursor-pointer theme-transition"
                 disabled={isLoading}
               >
                 {isLoading ? 'Signing In...' : 'Sign In'}
@@ -167,30 +167,30 @@ const LoginContent = () => {
               <div className="text-center space-y-3">
                 <button
                   type="button"
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline cursor-pointer theme-transition"
                   onClick={() => alert('Password reset functionality coming soon!')}
                 >
                   Forgot your password?
                 </button>
                 
                 {/* Demo Credentials */}
-                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                  <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">Demo Credentials:</p>
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg theme-transition">
+                  <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2 theme-transition">Demo Credentials:</p>
                   <div className="space-y-2 text-xs">
                     <div className="flex items-center space-x-2">
                       <Shield className="h-3 w-3 text-red-500" />
-                      <span className="text-gray-600 dark:text-gray-400">Admin: admin@chermiti.com / admin123</span>
+                      <span className="text-gray-600 dark:text-gray-400 theme-transition">Admin: admin@chermiti.com / admin123</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <User className="h-3 w-3 text-blue-500" />
-                      <span className="text-gray-600 dark:text-gray-400">Resident: john@example.com / user123</span>
+                      <span className="text-gray-600 dark:text-gray-400 theme-transition">Resident: john@example.com / user123</span>
                     </div>
                   </div>
                 </div>
 
                 <button
                   type="button"
-                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer theme-transition"
                   onClick={() => navigate('/')}
                 >
                   ← Back to Main Site

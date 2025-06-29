@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 type Theme = 'light' | 'dark';
@@ -18,7 +17,23 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     localStorage.setItem('theme', theme);
-    document.documentElement.classList.toggle('dark', theme === 'dark');
+    
+    // Add smooth transition class to document
+    document.documentElement.classList.add('theme-transition');
+    
+    // Apply theme with smooth transition
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    // Remove transition class after animation completes
+    const timeout = setTimeout(() => {
+      document.documentElement.classList.remove('theme-transition');
+    }, 600);
+
+    return () => clearTimeout(timeout);
   }, [theme]);
 
   const toggleTheme = () => {

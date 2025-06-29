@@ -30,8 +30,8 @@ const Index = () => {
 
   return (
     <ThemeProvider>
-      <div className="relative">
-        {/* Mouse Glow Effect */}
+      <div className="relative theme-transition">
+        {/* Mouse Glow Effect - Always present */}
         <MouseGlow />
 
         {/* Welcome Screen */}
