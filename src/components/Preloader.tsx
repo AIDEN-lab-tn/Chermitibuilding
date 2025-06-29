@@ -165,6 +165,20 @@ export const Preloader = ({ onComplete }: { onComplete: () => void }) => {
         </div>
       </div>
 
+      {/* Elegant corner decorations - RESTORED */}
+      <div className={`absolute top-8 left-8 w-16 h-16 border-l-2 border-t-2 ${
+        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-500/40'
+      }`} />
+      <div className={`absolute top-8 right-8 w-16 h-16 border-r-2 border-t-2 ${
+        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-500/40'
+      }`} />
+      <div className={`absolute bottom-8 left-8 w-16 h-16 border-l-2 border-b-2 ${
+        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-500/40'
+      }`} />
+      <div className={`absolute bottom-8 right-8 w-16 h-16 border-r-2 border-b-2 ${
+        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-500/40'
+      }`} />
+
       {/* Completion animation overlay */}
       {progress >= 100 && (
         <div className={`absolute inset-0 transition-opacity duration-800 animate-pulse ${

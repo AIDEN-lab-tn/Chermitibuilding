@@ -165,28 +165,37 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
           </div>
         </div>
 
-        {/* Start button - INSTANT style changes */}
+        {/* Start button - ENHANCED VISIBILITY with stronger contrast and glow */}
         <div className="relative">
           <button
             onClick={handleStart}
             disabled={isStarting}
-            className={`group relative px-12 py-4 rounded-2xl font-semibold text-lg cursor-pointer instant-theme-transition ${
+            className={`group relative px-12 py-4 rounded-2xl font-bold text-xl cursor-pointer instant-theme-transition ${
               theme === 'dark'
-                ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-2xl hover:shadow-blue-500/25'
-                : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-2xl hover:shadow-blue-400/25'
+                ? 'bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white shadow-2xl hover:shadow-blue-400/50'
+                : 'bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white shadow-2xl hover:shadow-blue-500/50'
             } ${isStarting ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-xl hover:scale-105'} transition-all duration-300`}
+            style={{
+              textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', // Enhanced text shadow for better visibility
+              filter: 'drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3))' // Button glow
+            }}
           >
             <span className="flex items-center space-x-3">
-              <span>{isStarting ? 'Starting Experience...' : 'Begin Your Journey'}</span>
-              <ArrowRight className={`h-5 w-5 transition-transform duration-300 ${
+              <span className="font-extrabold tracking-wide">{isStarting ? 'Starting Experience...' : 'Begin Your Journey'}</span>
+              <ArrowRight className={`h-6 w-6 transition-transform duration-300 ${
                 isStarting ? 'translate-x-1' : 'group-hover:translate-x-1'
               }`} />
             </span>
             
-            {/* Button glow effect */}
-            <div className={`absolute inset-0 rounded-2xl blur-xl opacity-30 transition-opacity duration-300 instant-theme-transition ${
-              theme === 'dark' ? 'bg-blue-500' : 'bg-blue-400'
-            } ${isStarting ? 'opacity-50' : 'group-hover:opacity-50'}`} />
+            {/* Enhanced button glow effect */}
+            <div className={`absolute inset-0 rounded-2xl blur-xl opacity-40 transition-opacity duration-300 instant-theme-transition ${
+              theme === 'dark' ? 'bg-blue-400' : 'bg-blue-600'
+            } ${isStarting ? 'opacity-60' : 'group-hover:opacity-60'}`} />
+            
+            {/* Additional inner glow for extra visibility */}
+            <div className={`absolute inset-0 rounded-2xl blur-sm opacity-20 transition-opacity duration-300 instant-theme-transition ${
+              theme === 'dark' ? 'bg-white' : 'bg-white'
+            } ${isStarting ? 'opacity-30' : 'group-hover:opacity-30'}`} />
           </button>
         </div>
 
@@ -197,6 +206,20 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
           Powered by cutting-edge 3D technology
         </p>
       </div>
+
+      {/* Elegant corner decorations - RESTORED */}
+      <div className={`absolute top-8 left-8 w-20 h-20 border-l-2 border-t-2 instant-theme-transition ${
+        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-500/40'
+      }`} />
+      <div className={`absolute top-8 right-8 w-20 h-20 border-r-2 border-t-2 instant-theme-transition ${
+        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-500/40'
+      }`} />
+      <div className={`absolute bottom-8 left-8 w-20 h-20 border-l-2 border-b-2 instant-theme-transition ${
+        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-500/40'
+      }`} />
+      <div className={`absolute bottom-8 right-8 w-20 h-20 border-r-2 border-b-2 instant-theme-transition ${
+        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-500/40'
+      }`} />
     </div>
   );
 };
