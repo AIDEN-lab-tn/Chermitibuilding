@@ -103,21 +103,26 @@ All colors MUST be HSL.
 @layer base {
   html {
     font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, 'sans-serif';
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   * {
     @apply border-border;
-    transition: color 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
-                background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
-                border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: color 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   body {
     @apply bg-background text-foreground;
-    cursor: none; /* Hide default cursor */
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: none !important; /* Force hide system cursor */
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Hide cursor on all elements */
+  *, *:before, *:after {
+    cursor: none !important;
   }
 }
 
@@ -130,7 +135,7 @@ All colors MUST be HSL.
     rgba(147, 197, 253, 0.15) 75%, /* Light blue-300 with transparency */
     rgba(59, 130, 246, 0.1) 100%   /* Light blue-500 with transparency */
   );
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .gradient-bg-dark {
@@ -141,77 +146,78 @@ All colors MUST be HSL.
     rgba(59, 130, 246, 0.2) 75%,   /* Blue-500 with transparency */
     rgba(30, 64, 175, 0.3) 100%    /* Dark blue-800 with transparency */
   );
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-effect {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Custom Mouse Cursor with Yellow Glow Effect */
+/* Custom Mouse Cursor with Yellow Glow Effect - Replaces system cursor */
 .cursor-glow {
   position: fixed;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 99999;
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translate(-50%, -50%);
+  mix-blend-mode: screen; /* Blend mode for better visibility */
 }
 
-/* Yellow glow cursor for both themes */
+/* Yellow glow cursor - Light mode (subtle) */
 .cursor-glow-light {
   background: radial-gradient(circle, 
     rgba(255, 193, 7, 0.9) 0%,     /* Bright yellow center */
-    rgba(255, 193, 7, 0.6) 20%,    /* Medium yellow */
-    rgba(255, 193, 7, 0.3) 40%,    /* Light yellow */
-    rgba(255, 193, 7, 0.1) 70%,    /* Very light yellow */
+    rgba(255, 193, 7, 0.6) 30%,    /* Medium yellow */
+    rgba(255, 193, 7, 0.3) 60%,    /* Light yellow */
+    rgba(255, 193, 7, 0.1) 80%,    /* Very light yellow */
+    transparent 100%
+  );
+  box-shadow: 
+    0 0 10px rgba(255, 193, 7, 0.6),
+    0 0 20px rgba(255, 193, 7, 0.4),
+    0 0 30px rgba(255, 193, 7, 0.2);
+}
+
+/* Yellow glow cursor - Dark mode (more intense) */
+.cursor-glow-dark {
+  background: radial-gradient(circle, 
+    rgba(255, 193, 7, 1) 0%,       /* Bright yellow center */
+    rgba(255, 193, 7, 0.8) 25%,    /* Medium yellow */
+    rgba(255, 193, 7, 0.5) 50%,    /* Light yellow */
+    rgba(255, 193, 7, 0.2) 75%,    /* Very light yellow */
     transparent 100%
   );
   box-shadow: 
     0 0 15px rgba(255, 193, 7, 0.8),
-    0 0 30px rgba(255, 193, 7, 0.5),
-    0 0 45px rgba(255, 193, 7, 0.3),
-    inset 0 0 10px rgba(255, 255, 255, 0.3);
-}
-
-.cursor-glow-dark {
-  background: radial-gradient(circle, 
-    rgba(255, 193, 7, 1) 0%,       /* Bright yellow center */
-    rgba(255, 193, 7, 0.8) 20%,    /* Medium yellow */
-    rgba(255, 193, 7, 0.4) 40%,    /* Light yellow */
-    rgba(255, 193, 7, 0.15) 70%,   /* Very light yellow */
-    transparent 100%
-  );
-  box-shadow: 
-    0 0 20px rgba(255, 193, 7, 0.9),
-    0 0 40px rgba(255, 193, 7, 0.6),
-    0 0 60px rgba(255, 193, 7, 0.4),
-    inset 0 0 15px rgba(255, 255, 255, 0.4);
+    0 0 30px rgba(255, 193, 7, 0.6),
+    0 0 45px rgba(255, 193, 7, 0.4),
+    0 0 60px rgba(255, 193, 7, 0.2);
 }
 
 /* Hover effect - make cursor larger and more intense */
 .cursor-glow-hover {
-  transform: translate(-50%, -50%) scale(1.8);
-  filter: brightness(1.3);
+  transform: translate(-50%, -50%) scale(1.5);
+  filter: brightness(1.2);
 }
 
-/* Click effect - make cursor smaller with intense pulse */
+/* Click effect - make cursor pulse */
 .cursor-glow-click {
-  transform: translate(-50%, -50%) scale(0.6);
-  animation: cursor-pulse-yellow 0.4s ease-out;
+  transform: translate(-50%, -50%) scale(0.8);
+  animation: cursor-pulse-yellow 0.3s ease-out;
 }
 
 @keyframes cursor-pulse-yellow {
   0% {
-    transform: translate(-50%, -50%) scale(0.6);
+    transform: translate(-50%, -50%) scale(0.8);
     filter: brightness(1.5);
   }
   50% {
-    transform: translate(-50%, -50%) scale(2.2);
+    transform: translate(-50%, -50%) scale(2);
     filter: brightness(2);
   }
   100% {
@@ -220,59 +226,89 @@ All colors MUST be HSL.
   }
 }
 
-/* Special cursor for interactive elements */
+/* Interactive elements cursor */
 .cursor-glow-interactive {
-  transform: translate(-50%, -50%) scale(2.2);
-  filter: brightness(1.4);
+  transform: translate(-50%, -50%) scale(1.8);
+  filter: brightness(1.3);
 }
 
 /* Cursor trail effect with yellow glow */
 .cursor-trail {
   position: fixed;
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9998;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 99998;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translate(-50%, -50%);
 }
 
 .cursor-trail-light {
   background: radial-gradient(circle, 
-    rgba(255, 193, 7, 0.6) 0%, 
+    rgba(255, 193, 7, 0.5) 0%, 
+    rgba(255, 193, 7, 0.2) 50%, 
+    transparent 100%
+  );
+  box-shadow: 0 0 6px rgba(255, 193, 7, 0.4);
+}
+
+.cursor-trail-dark {
+  background: radial-gradient(circle, 
+    rgba(255, 193, 7, 0.7) 0%, 
     rgba(255, 193, 7, 0.3) 50%, 
     transparent 100%
   );
   box-shadow: 0 0 8px rgba(255, 193, 7, 0.5);
 }
 
-.cursor-trail-dark {
-  background: radial-gradient(circle, 
-    rgba(255, 193, 7, 0.8) 0%, 
-    rgba(255, 193, 7, 0.4) 50%, 
-    transparent 100%
-  );
-  box-shadow: 0 0 12px rgba(255, 193, 7, 0.6);
+/* Dark mode fade-in effect */
+.dark-mode-fade {
+  animation: darkModeFadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes darkModeFadeIn {
+  0% {
+    opacity: 0;
+    filter: brightness(1.2);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
 }
 
 /* Smooth theme transition for all elements */
 .theme-transition {
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Enhanced transitions for specific elements */
 button, input, textarea, select, .card, .glass-effect {
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Smooth color transitions for text and backgrounds */
 h1, h2, h3, h4, h5, h6, p, span, div {
-  transition: color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Smooth border and shadow transitions */
 .border, .shadow, .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl {
-  transition: border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
-              box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ensure cursor is hidden on all interactive elements */
+button, a, input, textarea, select, [role="button"], .cursor-pointer {
+  cursor: none !important;
+}
+
+/* Special handling for text selection */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+::-moz-selection {
+  background: rgba(59, 130, 246, 0.3);
 }

@@ -21,17 +21,20 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     // Add smooth transition class to document
     document.documentElement.classList.add('theme-transition');
     
-    // Apply theme with smooth transition
+    // Apply theme with smooth transition and fade effect
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
+      document.body.classList.add('dark-mode-fade');
     } else {
       document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark-mode-fade');
     }
 
-    // Remove transition class after animation completes
+    // Remove transition and fade classes after animation completes
     const timeout = setTimeout(() => {
       document.documentElement.classList.remove('theme-transition');
-    }, 600);
+      document.body.classList.remove('dark-mode-fade');
+    }, 800);
 
     return () => clearTimeout(timeout);
   }, [theme]);
