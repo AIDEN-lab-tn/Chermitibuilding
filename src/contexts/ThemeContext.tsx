@@ -18,16 +18,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     localStorage.setItem('theme', theme);
     
-    // Add smooth transition class to document
+    // Add fast transition class to document
     document.documentElement.classList.add('theme-transition');
     
-    // Apply theme with smooth transition and fade effect for BOTH modes
+    // Apply theme with fast transition and fade effect for BOTH modes
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
       document.body.classList.remove('light-mode-fade');
       document.body.classList.add('dark-mode-fade');
       
-      // Add content animation to all major content containers
+      // Add fast content animation to all major content containers
       const contentElements = document.querySelectorAll('.card, .glass-effect, main, section, article');
       contentElements.forEach(el => {
         el.classList.remove('content-fade-in');
@@ -40,7 +40,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       document.body.classList.remove('dark-mode-fade');
       document.body.classList.add('light-mode-fade');
       
-      // Add content animation to all major content containers
+      // Add fast content animation to all major content containers
       const contentElements = document.querySelectorAll('.card, .glass-effect, main, section, article');
       contentElements.forEach(el => {
         el.classList.remove('content-fade-in');
@@ -50,7 +50,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       });
     }
 
-    // Remove transition and fade classes after animation completes
+    // Remove transition and fade classes after animation completes (much faster now)
     const timeout = setTimeout(() => {
       document.documentElement.classList.remove('theme-transition');
       document.body.classList.remove('dark-mode-fade', 'light-mode-fade');
@@ -60,7 +60,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       contentElements.forEach(el => {
         el.classList.remove('content-fade-in');
       });
-    }, 1000); // Increased to 1 second to match CSS transition duration
+    }, 300); // Reduced to 300ms to match CSS transition duration
 
     return () => clearTimeout(timeout);
   }, [theme]);

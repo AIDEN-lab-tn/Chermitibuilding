@@ -9,12 +9,11 @@ export const MouseGlow = () => {
   const { theme } = useTheme();
 
   useEffect(() => {
-    // Show cursor after a brief delay
-    const showTimer = setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
+    // Show cursor immediately
+    setIsVisible(true);
 
     const handleMouseMove = (e: MouseEvent) => {
+      // Update position immediately with no delay
       setMousePosition({ x: e.clientX, y: e.clientY });
 
       // Check if hovering over interactive elements
@@ -40,14 +39,14 @@ export const MouseGlow = () => {
       setIsVisible(true);
     };
 
-    document.addEventListener('mousemove', handleMouseMove, { passive: true });
+    // Use passive: false for mousemove to ensure real-time updates
+    document.addEventListener('mousemove', handleMouseMove, { passive: false });
     document.addEventListener('mousedown', handleMouseDown, { passive: true });
     document.addEventListener('mouseup', handleMouseUp, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave, { passive: true });
     document.addEventListener('mouseenter', handleMouseEnter, { passive: true });
 
     return () => {
-      clearTimeout(showTimer);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mouseup', handleMouseUp);
@@ -68,7 +67,8 @@ export const MouseGlow = () => {
       style={{
         left: mousePosition.x,
         top: mousePosition.y,
-        opacity: isVisible ? 1 : 0,
+        opacity: 1,
+        willChange: 'transform', // Optimize for animations
       }}
     />
   );
