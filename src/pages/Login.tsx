@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Building2, Mail, Lock, AlertCircle, User, Shield, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
+import { MouseGlow } from '@/components/MouseGlow';
 import logo from '/public/logo.png';
 
 // Mock users database
@@ -88,6 +89,7 @@ const LoginContent = () => {
 
   return (
     <div className={`min-h-screen flex items-center justify-center p-6 ${theme === 'dark' ? 'gradient-bg-dark' : 'gradient-bg-light'}`}>
+      <MouseGlow />
       <div className="w-full max-w-md">
         <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-2xl">
           <CardHeader className="text-center">
@@ -97,7 +99,7 @@ const LoginContent = () => {
               <div className="flex-1 flex justify-end">
                 <button
                   onClick={toggleTheme}
-                  className="text-gray-800 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-300 transition-colors p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700/50"
+                  className="text-gray-800 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-300 transition-colors p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700/50 cursor-pointer"
                 >
                   {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                 </button>
@@ -131,7 +133,7 @@ const LoginContent = () => {
                   type="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2"
+                  className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
                   placeholder="Enter your email"
                   required
                 />
@@ -148,7 +150,7 @@ const LoginContent = () => {
                   type="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2"
+                  className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
                   placeholder="Enter your password"
                   required
                 />
@@ -156,7 +158,7 @@ const LoginContent = () => {
 
               <Button 
                 type="submit" 
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 cursor-pointer"
                 disabled={isLoading}
               >
                 {isLoading ? 'Signing In...' : 'Sign In'}
@@ -165,7 +167,7 @@ const LoginContent = () => {
               <div className="text-center space-y-3">
                 <button
                   type="button"
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
                   onClick={() => alert('Password reset functionality coming soon!')}
                 >
                   Forgot your password?
@@ -188,7 +190,7 @@ const LoginContent = () => {
 
                 <button
                   type="button"
-                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
                   onClick={() => navigate('/')}
                 >
                   ← Back to Main Site

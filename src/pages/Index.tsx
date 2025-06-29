@@ -9,6 +9,7 @@ import { Preloader } from '@/components/Preloader';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { Footer } from '@/components/Footer';
 import { ScrollProgressBar } from '@/components/ScrollProgressBar';
+import { MouseGlow } from '@/components/MouseGlow';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { ThreeErrorBoundary } from '@/components/ThreeErrorBoundary';
 
@@ -30,6 +31,9 @@ const Index = () => {
   return (
     <ThemeProvider>
       <div className="relative">
+        {/* Mouse Glow Effect */}
+        <MouseGlow />
+
         {/* Welcome Screen */}
         {showWelcome && (
           <WelcomeScreen onStart={handleWelcomeStart} />
