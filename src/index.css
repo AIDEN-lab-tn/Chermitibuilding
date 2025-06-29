@@ -113,13 +113,25 @@ All colors MUST be HSL.
   }
 }
 
-/* Custom gradient backgrounds */
+/* Custom gradient backgrounds using button blue colors */
 .gradient-bg-light {
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 25%, #bae6fd 50%, #7dd3fc 75%, #38bdf8 100%);
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.1) 0%,    /* Light blue-500 with transparency */
+    rgba(147, 197, 253, 0.15) 25%, /* Light blue-300 with transparency */
+    rgba(255, 255, 255, 0.8) 50%,  /* White with transparency */
+    rgba(147, 197, 253, 0.15) 75%, /* Light blue-300 with transparency */
+    rgba(59, 130, 246, 0.1) 100%   /* Light blue-500 with transparency */
+  );
 }
 
 .gradient-bg-dark {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%);
+  background: linear-gradient(135deg, 
+    rgba(30, 64, 175, 0.3) 0%,     /* Dark blue-800 with transparency */
+    rgba(59, 130, 246, 0.2) 25%,   /* Blue-500 with transparency */
+    rgba(15, 23, 42, 0.9) 50%,     /* Dark slate with transparency */
+    rgba(59, 130, 246, 0.2) 75%,   /* Blue-500 with transparency */
+    rgba(30, 64, 175, 0.3) 100%    /* Dark blue-800 with transparency */
+  );
 }
 
 .glass-effect {

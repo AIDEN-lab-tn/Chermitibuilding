@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,12 +29,9 @@ import {
   Moon,
   UserPlus,
   Building,
-  Target,
   CreditCard,
-  Search,
-  Filter,
-  Eye,
-  MapPin
+  FileText,
+  Target
 } from 'lucide-react';
 import logo from '/public/logo.png';
 
@@ -55,10 +51,7 @@ const AdminDashboardContent = () => {
       floor: 25,
       status: 'Owner',
       purchaseDate: '2024-01-15',
-      paymentStatus: 'Current',
-      totalAmount: 850000,
-      paidAmount: 637500,
-      phone: '+1 (555) 123-4567'
+      paymentStatus: 'Current'
     },
     {
       id: '2',
@@ -68,10 +61,7 @@ const AdminDashboardContent = () => {
       floor: 12,
       status: 'Owner',
       purchaseDate: '2024-03-20',
-      paymentStatus: 'Current',
-      totalAmount: 750000,
-      paidAmount: 562500,
-      phone: '+1 (555) 234-5678'
+      paymentStatus: 'Current'
     },
     {
       id: '3',
@@ -81,40 +71,15 @@ const AdminDashboardContent = () => {
       floor: 34,
       status: 'Renter',
       purchaseDate: '2024-06-10',
-      paymentStatus: 'Overdue',
-      totalAmount: 920000,
-      paidAmount: 460000,
-      phone: '+1 (555) 345-6789'
+      paymentStatus: 'Overdue'
     }
   ]);
 
   const [apartments, setApartments] = useState([
-    { id: '1', number: 'A-2501', floor: 25, type: 'Penthouse', size: '3500 sq ft', status: 'Sold', price: 850000, resident: 'John Smith' },
-    { id: '2', number: 'B-1203', floor: 12, type: 'Luxury', size: '2800 sq ft', status: 'Sold', price: 750000, resident: 'Sarah Johnson' },
-    { id: '3', number: 'C-3401', floor: 34, type: 'Premium', size: '3200 sq ft', status: 'Sold', price: 920000, resident: 'Mike Wilson' },
-    { id: '4', number: 'A-4502', floor: 45, type: 'Penthouse', size: '4000 sq ft', status: 'Available', price: 1200000, resident: null },
-    { id: '5', number: 'B-2304', floor: 23, type: 'Luxury', size: '2600 sq ft', status: 'Reserved', price: 680000, resident: null }
-  ]);
-
-  const [progressUpdates, setProgressUpdates] = useState([
-    {
-      id: 1,
-      apartmentId: '1',
-      apartmentNumber: 'A-2501',
-      phase: 'Interior Finishing',
-      progress: 85,
-      lastUpdate: '2024-12-15',
-      notes: 'Kitchen installation completed, bathroom fixtures in progress'
-    },
-    {
-      id: 2,
-      apartmentId: '2',
-      apartmentNumber: 'B-1203',
-      phase: 'Final Inspection',
-      progress: 95,
-      lastUpdate: '2024-12-14',
-      notes: 'Minor touch-ups required, expected completion next week'
-    }
+    { id: 1, number: 'A-2501', floor: 25, type: 'Penthouse', size: '3500 sq ft', status: 'Occupied', price: '$2.5M' },
+    { id: 2, number: 'B-1203', floor: 12, type: 'Luxury', size: '2200 sq ft', status: 'Occupied', price: '$1.8M' },
+    { id: 3, number: 'C-3401', floor: 34, type: 'Premium', size: '1800 sq ft', status: 'Available', price: '$1.5M' },
+    { id: 4, number: 'D-4502', floor: 45, type: 'Penthouse', size: '4000 sq ft', status: 'Under Construction', price: '$3.2M' }
   ]);
 
   const [updates, setUpdates] = useState([
@@ -124,7 +89,8 @@ const AdminDashboardContent = () => {
       title: 'Elevator Maintenance Completed',
       description: 'All elevators have been serviced and are operating normally.',
       type: 'maintenance',
-      status: 'published'
+      status: 'published',
+      apartmentNumber: 'All Units'
     },
     {
       id: 2,
@@ -132,7 +98,8 @@ const AdminDashboardContent = () => {
       title: 'New Gym Equipment Installed',
       description: 'State-of-the-art fitness equipment has been added to the rooftop gym.',
       type: 'amenity',
-      status: 'published'
+      status: 'published',
+      apartmentNumber: 'All Units'
     }
   ]);
 
@@ -155,11 +122,17 @@ const AdminDashboardContent = () => {
     }
   ]);
 
-  const [newResident, setNewResident] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    apartmentId: ''
+  const [newUpdate, setNewUpdate] = useState({
+    title: '',
+    description: '',
+    type: 'maintenance',
+    apartmentNumber: 'All Units'
+  });
+
+  const [newAnnouncement, setNewAnnouncement] = useState({
+    title: '',
+    content: '',
+    priority: 'medium'
   });
 
   const [newApartment, setNewApartment] = useState({
@@ -170,23 +143,11 @@ const AdminDashboardContent = () => {
     price: ''
   });
 
-  const [newUpdate, setNewUpdate] = useState({
-    title: '',
-    description: '',
-    type: 'maintenance'
-  });
-
-  const [newAnnouncement, setNewAnnouncement] = useState({
-    title: '',
-    content: '',
-    priority: 'medium'
-  });
-
-  const [newProgressUpdate, setNewProgressUpdate] = useState({
-    apartmentId: '',
-    phase: '',
-    progress: 0,
-    notes: ''
+  const [newResident, setNewResident] = useState({
+    name: '',
+    email: '',
+    apartmentNumber: '',
+    status: 'Owner'
   });
 
   useEffect(() => {
@@ -208,51 +169,6 @@ const AdminDashboardContent = () => {
     navigate('/');
   };
 
-  const handleAddResident = (e: React.FormEvent) => {
-    e.preventDefault();
-    const resident = {
-      id: Date.now().toString(),
-      name: newResident.name,
-      email: newResident.email,
-      phone: newResident.phone,
-      apartmentNumber: apartments.find(apt => apt.id === newResident.apartmentId)?.number || '',
-      floor: apartments.find(apt => apt.id === newResident.apartmentId)?.floor || 0,
-      status: 'Owner',
-      purchaseDate: new Date().toISOString().split('T')[0],
-      paymentStatus: 'Current',
-      totalAmount: apartments.find(apt => apt.id === newResident.apartmentId)?.price || 0,
-      paidAmount: 0
-    };
-    setResidents([...residents, resident]);
-    
-    // Update apartment status
-    setApartments(apartments.map(apt => 
-      apt.id === newResident.apartmentId 
-        ? { ...apt, status: 'Sold', resident: newResident.name }
-        : apt
-    ));
-    
-    setNewResident({ name: '', email: '', phone: '', apartmentId: '' });
-    alert('Resident added successfully!');
-  };
-
-  const handleAddApartment = (e: React.FormEvent) => {
-    e.preventDefault();
-    const apartment = {
-      id: Date.now().toString(),
-      number: newApartment.number,
-      floor: parseInt(newApartment.floor),
-      type: newApartment.type,
-      size: newApartment.size,
-      status: 'Available',
-      price: parseInt(newApartment.price),
-      resident: null
-    };
-    setApartments([...apartments, apartment]);
-    setNewApartment({ number: '', floor: '', type: 'Luxury', size: '', price: '' });
-    alert('Apartment added successfully!');
-  };
-
   const handleAddUpdate = (e: React.FormEvent) => {
     e.preventDefault();
     const update = {
@@ -261,10 +177,11 @@ const AdminDashboardContent = () => {
       title: newUpdate.title,
       description: newUpdate.description,
       type: newUpdate.type,
-      status: 'published'
+      status: 'published',
+      apartmentNumber: newUpdate.apartmentNumber
     };
     setUpdates([update, ...updates]);
-    setNewUpdate({ title: '', description: '', type: 'maintenance' });
+    setNewUpdate({ title: '', description: '', type: 'maintenance', apartmentNumber: 'All Units' });
     alert('Update published successfully!');
   };
 
@@ -283,21 +200,37 @@ const AdminDashboardContent = () => {
     alert('Announcement published successfully!');
   };
 
-  const handleAddProgressUpdate = (e: React.FormEvent) => {
+  const handleAddApartment = (e: React.FormEvent) => {
     e.preventDefault();
-    const apartment = apartments.find(apt => apt.id === newProgressUpdate.apartmentId);
-    const update = {
+    const apartment = {
       id: Date.now(),
-      apartmentId: newProgressUpdate.apartmentId,
-      apartmentNumber: apartment?.number || '',
-      phase: newProgressUpdate.phase,
-      progress: newProgressUpdate.progress,
-      lastUpdate: new Date().toISOString().split('T')[0],
-      notes: newProgressUpdate.notes
+      number: newApartment.number,
+      floor: parseInt(newApartment.floor),
+      type: newApartment.type,
+      size: newApartment.size,
+      status: 'Available',
+      price: newApartment.price
     };
-    setProgressUpdates([update, ...progressUpdates]);
-    setNewProgressUpdate({ apartmentId: '', phase: '', progress: 0, notes: '' });
-    alert('Progress update added successfully!');
+    setApartments([...apartments, apartment]);
+    setNewApartment({ number: '', floor: '', type: 'Luxury', size: '', price: '' });
+    alert('Apartment created successfully!');
+  };
+
+  const handleAddResident = (e: React.FormEvent) => {
+    e.preventDefault();
+    const resident = {
+      id: Date.now().toString(),
+      name: newResident.name,
+      email: newResident.email,
+      apartmentNumber: newResident.apartmentNumber,
+      floor: apartments.find(apt => apt.number === newResident.apartmentNumber)?.floor || 0,
+      status: newResident.status,
+      purchaseDate: new Date().toISOString().split('T')[0],
+      paymentStatus: 'Current'
+    };
+    setResidents([...residents, resident]);
+    setNewResident({ name: '', email: '', apartmentNumber: '', status: 'Owner' });
+    alert('Resident added successfully!');
   };
 
   const deleteUpdate = (id: number) => {
@@ -325,15 +258,6 @@ const AdminDashboardContent = () => {
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-700';
       case 'low': return 'bg-green-100 text-green-800 border-green-300 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700';
       default: return 'bg-gray-100 text-gray-800 border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600';
-    }
-  };
-
-  const getApartmentStatusColor = (status: string) => {
-    switch (status) {
-      case 'Available': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300';
-      case 'Sold': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300';
-      case 'Reserved': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
     }
   };
 
@@ -419,28 +343,20 @@ const AdminDashboardContent = () => {
                   Progress Updates
                 </Button>
                 <Button
-                  variant={activeTab === 'payment-management' ? 'default' : 'ghost'}
-                  className={`w-full justify-start ${activeTab === 'payment-management' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
-                  onClick={() => setActiveTab('payment-management')}
-                >
-                  <CreditCard className="h-4 w-4 mr-2" />
-                  Payment Management
-                </Button>
-                <Button
-                  variant={activeTab === 'updates' ? 'default' : 'ghost'}
-                  className={`w-full justify-start ${activeTab === 'updates' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
-                  onClick={() => setActiveTab('updates')}
-                >
-                  <Bell className="h-4 w-4 mr-2" />
-                  Manage Updates
-                </Button>
-                <Button
                   variant={activeTab === 'announcements' ? 'default' : 'ghost'}
                   className={`w-full justify-start ${activeTab === 'announcements' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
                   onClick={() => setActiveTab('announcements')}
                 >
                   <Calendar className="h-4 w-4 mr-2" />
                   Announcements
+                </Button>
+                <Button
+                  variant={activeTab === 'payment-management' ? 'default' : 'ghost'}
+                  className={`w-full justify-start ${activeTab === 'payment-management' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  onClick={() => setActiveTab('payment-management')}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Payment Management
                 </Button>
               </CardContent>
             </Card>
@@ -456,21 +372,10 @@ const AdminDashboardContent = () => {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Total Apartments</p>
-                          <p className="text-2xl font-bold text-gray-900 dark:text-white">{apartments.length}</p>
-                        </div>
-                        <Building className="h-8 w-8 text-blue-600" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div>
                           <p className="text-sm text-gray-600 dark:text-gray-400">Total Residents</p>
                           <p className="text-2xl font-bold text-gray-900 dark:text-white">{residents.length}</p>
                         </div>
-                        <Users className="h-8 w-8 text-green-600" />
+                        <Users className="h-8 w-8 text-blue-600" />
                       </div>
                     </CardContent>
                   </Card>
@@ -478,10 +383,10 @@ const AdminDashboardContent = () => {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Available Units</p>
-                          <p className="text-2xl font-bold text-gray-900 dark:text-white">{apartments.filter(apt => apt.status === 'Available').length}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Total Apartments</p>
+                          <p className="text-2xl font-bold text-gray-900 dark:text-white">{apartments.length}</p>
                         </div>
-                        <Home className="h-8 w-8 text-orange-600" />
+                        <Building className="h-8 w-8 text-green-600" />
                       </div>
                     </CardContent>
                   </Card>
@@ -489,7 +394,18 @@ const AdminDashboardContent = () => {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Total Revenue</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Active Updates</p>
+                          <p className="text-2xl font-bold text-gray-900 dark:text-white">{updates.length}</p>
+                        </div>
+                        <Bell className="h-8 w-8 text-purple-600" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Revenue</p>
                           <p className="text-2xl font-bold text-gray-900 dark:text-white">$2.4M</p>
                         </div>
                         <DollarSign className="h-8 w-8 text-yellow-600" />
@@ -520,41 +436,6 @@ const AdminDashboardContent = () => {
                     </div>
                   </CardContent>
                 </Card>
-
-                {/* Quick Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
-                    <CardHeader>
-                      <CardTitle className="text-gray-900 dark:text-white">Occupancy Rate</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-bold text-blue-600 mb-2">
-                        {Math.round((apartments.filter(apt => apt.status === 'Sold').length / apartments.length) * 100)}%
-                      </div>
-                      <Progress value={(apartments.filter(apt => apt.status === 'Sold').length / apartments.length) * 100} className="h-2" />
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                        {apartments.filter(apt => apt.status === 'Sold').length} of {apartments.length} units occupied
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
-                    <CardHeader>
-                      <CardTitle className="text-gray-900 dark:text-white">Payment Status</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-sm text-gray-600 dark:text-gray-400">Current</span>
-                          <span className="text-sm font-semibold text-green-600">{residents.filter(r => r.paymentStatus === 'Current').length}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-sm text-gray-600 dark:text-gray-400">Overdue</span>
-                          <span className="text-sm font-semibold text-red-600">{residents.filter(r => r.paymentStatus === 'Overdue').length}</span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
               </div>
             )}
 
@@ -565,7 +446,7 @@ const AdminDashboardContent = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2 text-gray-900 dark:text-white">
                       <Plus className="h-5 w-5" />
-                      <span>Add New Apartment</span>
+                      <span>Create New Apartment</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -612,26 +493,25 @@ const AdminDashboardContent = () => {
                           id="size"
                           value={newApartment.size}
                           onChange={(e) => setNewApartment({...newApartment, size: e.target.value})}
-                          placeholder="2800 sq ft"
+                          placeholder="2200 sq ft"
                           className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2"
                           required
                         />
                       </div>
                       <div>
-                        <Label htmlFor="price" className="text-gray-900 dark:text-blue-300 font-semibold">Price ($)</Label>
+                        <Label htmlFor="price" className="text-gray-900 dark:text-blue-300 font-semibold">Price</Label>
                         <Input
                           id="price"
-                          type="number"
                           value={newApartment.price}
                           onChange={(e) => setNewApartment({...newApartment, price: e.target.value})}
-                          placeholder="750000"
+                          placeholder="$1.8M"
                           className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2"
                           required
                         />
                       </div>
                       <div className="md:col-span-2">
                         <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                          Add Apartment
+                          Create Apartment
                         </Button>
                       </div>
                     </form>
@@ -641,20 +521,19 @@ const AdminDashboardContent = () => {
                 {/* Apartments List */}
                 <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
                   <CardHeader>
-                    <CardTitle className="text-gray-900 dark:text-white">Apartment Inventory</CardTitle>
+                    <CardTitle className="text-gray-900 dark:text-white">Apartment Management</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="overflow-x-auto">
                       <table className="w-full">
                         <thead>
                           <tr className="border-b border-gray-200 dark:border-gray-700">
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Unit</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Number</th>
                             <th className="text-left p-3 text-gray-900 dark:text-white">Floor</th>
                             <th className="text-left p-3 text-gray-900 dark:text-white">Type</th>
                             <th className="text-left p-3 text-gray-900 dark:text-white">Size</th>
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Price</th>
                             <th className="text-left p-3 text-gray-900 dark:text-white">Status</th>
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Resident</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Price</th>
                             <th className="text-left p-3 text-gray-900 dark:text-white">Actions</th>
                           </tr>
                         </thead>
@@ -665,20 +544,20 @@ const AdminDashboardContent = () => {
                               <td className="p-3 text-gray-800 dark:text-gray-300">{apartment.floor}</td>
                               <td className="p-3 text-gray-800 dark:text-gray-300">{apartment.type}</td>
                               <td className="p-3 text-gray-800 dark:text-gray-300">{apartment.size}</td>
-                              <td className="p-3 text-gray-800 dark:text-gray-300">${apartment.price.toLocaleString()}</td>
                               <td className="p-3">
-                                <Badge className={getApartmentStatusColor(apartment.status)}>
+                                <Badge className={
+                                  apartment.status === 'Occupied' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' :
+                                  apartment.status === 'Available' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' :
+                                  'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300'
+                                }>
                                   {apartment.status}
                                 </Badge>
                               </td>
-                              <td className="p-3 text-gray-800 dark:text-gray-300">{apartment.resident || '-'}</td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{apartment.price}</td>
                               <td className="p-3">
                                 <div className="flex space-x-2">
                                   <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600">
                                     <Edit className="h-3 w-3" />
-                                  </Button>
-                                  <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600">
-                                    <Eye className="h-3 w-3" />
                                   </Button>
                                 </div>
                               </td>
@@ -728,31 +607,30 @@ const AdminDashboardContent = () => {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="residentPhone" className="text-gray-900 dark:text-blue-300 font-semibold">Phone</Label>
-                        <Input
-                          id="residentPhone"
-                          value={newResident.phone}
-                          onChange={(e) => setNewResident({...newResident, phone: e.target.value})}
-                          placeholder="+1 (555) 123-4567"
-                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="assignApartment" className="text-gray-900 dark:text-blue-300 font-semibold">Assign Apartment</Label>
+                        <Label htmlFor="residentApartment" className="text-gray-900 dark:text-blue-300 font-semibold">Apartment</Label>
                         <select
-                          id="assignApartment"
-                          value={newResident.apartmentId}
-                          onChange={(e) => setNewResident({...newResident, apartmentId: e.target.value})}
+                          id="residentApartment"
+                          value={newResident.apartmentNumber}
+                          onChange={(e) => setNewResident({...newResident, apartmentNumber: e.target.value})}
                           className="w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white mt-2"
                           required
                         >
                           <option value="">Select Apartment</option>
                           {apartments.filter(apt => apt.status === 'Available').map(apt => (
-                            <option key={apt.id} value={apt.id}>
-                              {apt.number} - {apt.type} (${apt.price.toLocaleString()})
-                            </option>
+                            <option key={apt.id} value={apt.number}>{apt.number} - {apt.type}</option>
                           ))}
+                        </select>
+                      </div>
+                      <div>
+                        <Label htmlFor="residentStatus" className="text-gray-900 dark:text-blue-300 font-semibold">Status</Label>
+                        <select
+                          id="residentStatus"
+                          value={newResident.status}
+                          onChange={(e) => setNewResident({...newResident, status: e.target.value})}
+                          className="w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white mt-2"
+                        >
+                          <option value="Owner">Owner</option>
+                          <option value="Renter">Renter</option>
                         </select>
                       </div>
                       <div className="md:col-span-2">
@@ -776,7 +654,6 @@ const AdminDashboardContent = () => {
                           <tr className="border-b border-gray-200 dark:border-gray-700">
                             <th className="text-left p-3 text-gray-900 dark:text-white">Name</th>
                             <th className="text-left p-3 text-gray-900 dark:text-white">Email</th>
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Phone</th>
                             <th className="text-left p-3 text-gray-900 dark:text-white">Apartment</th>
                             <th className="text-left p-3 text-gray-900 dark:text-white">Status</th>
                             <th className="text-left p-3 text-gray-900 dark:text-white">Payment</th>
@@ -788,7 +665,6 @@ const AdminDashboardContent = () => {
                             <tr key={resident.id} className="border-b border-gray-100 dark:border-gray-800">
                               <td className="p-3 text-gray-800 dark:text-gray-300">{resident.name}</td>
                               <td className="p-3 text-gray-800 dark:text-gray-300">{resident.email}</td>
-                              <td className="p-3 text-gray-800 dark:text-gray-300">{resident.phone}</td>
                               <td className="p-3 text-gray-800 dark:text-gray-300">{resident.apartmentNumber}</td>
                               <td className="p-3">
                                 <Badge className={resident.status === 'Owner' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'}>
@@ -822,217 +698,45 @@ const AdminDashboardContent = () => {
 
             {activeTab === 'progress-updates' && (
               <div className="space-y-6">
-                {/* Add Progress Update */}
-                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2 text-gray-900 dark:text-white">
-                      <Plus className="h-5 w-5" />
-                      <span>Add Progress Update</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <form onSubmit={handleAddProgressUpdate} className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="progressApartment" className="text-gray-900 dark:text-blue-300 font-semibold">Apartment</Label>
-                          <select
-                            id="progressApartment"
-                            value={newProgressUpdate.apartmentId}
-                            onChange={(e) => setNewProgressUpdate({...newProgressUpdate, apartmentId: e.target.value})}
-                            className="w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white mt-2"
-                            required
-                          >
-                            <option value="">Select Apartment</option>
-                            {apartments.map(apt => (
-                              <option key={apt.id} value={apt.id}>
-                                {apt.number} - {apt.type}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div>
-                          <Label htmlFor="progressPhase" className="text-gray-900 dark:text-blue-300 font-semibold">Construction Phase</Label>
-                          <Input
-                            id="progressPhase"
-                            value={newProgressUpdate.phase}
-                            onChange={(e) => setNewProgressUpdate({...newProgressUpdate, phase: e.target.value})}
-                            placeholder="e.g., Interior Finishing"
-                            className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2"
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <Label htmlFor="progressPercent" className="text-gray-900 dark:text-blue-300 font-semibold">Progress Percentage</Label>
-                        <Input
-                          id="progressPercent"
-                          type="number"
-                          min="0"
-                          max="100"
-                          value={newProgressUpdate.progress}
-                          onChange={(e) => setNewProgressUpdate({...newProgressUpdate, progress: parseInt(e.target.value)})}
-                          placeholder="85"
-                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="progressNotes" className="text-gray-900 dark:text-blue-300 font-semibold">Notes</Label>
-                        <Textarea
-                          id="progressNotes"
-                          value={newProgressUpdate.notes}
-                          onChange={(e) => setNewProgressUpdate({...newProgressUpdate, notes: e.target.value})}
-                          placeholder="Detailed progress notes..."
-                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2"
-                          rows={3}
-                          required
-                        />
-                      </div>
-                      <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                        Add Progress Update
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
-
-                {/* Progress Updates List */}
-                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
-                  <CardHeader>
-                    <CardTitle className="text-gray-900 dark:text-white">Construction Progress</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {progressUpdates.map((update) => (
-                        <div key={update.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                          <div className="flex items-start justify-between mb-3">
-                            <div>
-                              <h3 className="font-semibold text-gray-900 dark:text-white">{update.apartmentNumber}</h3>
-                              <p className="text-sm text-gray-600 dark:text-gray-400">{update.phase}</p>
-                            </div>
-                            <div className="text-right">
-                              <span className="text-2xl font-bold text-blue-600">{update.progress}%</span>
-                              <p className="text-xs text-gray-500">{update.lastUpdate}</p>
-                            </div>
-                          </div>
-                          <Progress value={update.progress} className="h-2 mb-3" />
-                          <p className="text-sm text-gray-800 dark:text-gray-300">{update.notes}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-
-            {activeTab === 'payment-management' && (
-              <div className="space-y-6">
-                {/* Payment Overview */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
-                    <CardContent className="p-6">
-                      <div className="text-center">
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Total Revenue</p>
-                        <p className="text-2xl font-bold text-green-600">
-                          ${residents.reduce((sum, r) => sum + r.paidAmount, 0).toLocaleString()}
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
-                    <CardContent className="p-6">
-                      <div className="text-center">
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Outstanding</p>
-                        <p className="text-2xl font-bold text-orange-600">
-                          ${residents.reduce((sum, r) => sum + (r.totalAmount - r.paidAmount), 0).toLocaleString()}
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
-                    <CardContent className="p-6">
-                      <div className="text-center">
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Overdue Accounts</p>
-                        <p className="text-2xl font-bold text-red-600">
-                          {residents.filter(r => r.paymentStatus === 'Overdue').length}
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Payment Details */}
-                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
-                  <CardHeader>
-                    <CardTitle className="text-gray-900 dark:text-white">Payment Management</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead>
-                          <tr className="border-b border-gray-200 dark:border-gray-700">
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Resident</th>
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Apartment</th>
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Total Amount</th>
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Paid Amount</th>
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Remaining</th>
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Status</th>
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Progress</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {residents.map((resident) => (
-                            <tr key={resident.id} className="border-b border-gray-100 dark:border-gray-800">
-                              <td className="p-3 text-gray-800 dark:text-gray-300">{resident.name}</td>
-                              <td className="p-3 text-gray-800 dark:text-gray-300">{resident.apartmentNumber}</td>
-                              <td className="p-3 text-gray-800 dark:text-gray-300">${resident.totalAmount.toLocaleString()}</td>
-                              <td className="p-3 text-gray-800 dark:text-gray-300">${resident.paidAmount.toLocaleString()}</td>
-                              <td className="p-3 text-gray-800 dark:text-gray-300">${(resident.totalAmount - resident.paidAmount).toLocaleString()}</td>
-                              <td className="p-3">
-                                <Badge className={resident.paymentStatus === 'Current' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}>
-                                  {resident.paymentStatus}
-                                </Badge>
-                              </td>
-                              <td className="p-3">
-                                <div className="w-24">
-                                  <Progress value={(resident.paidAmount / resident.totalAmount) * 100} className="h-2" />
-                                  <span className="text-xs text-gray-500">{Math.round((resident.paidAmount / resident.totalAmount) * 100)}%</span>
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-
-            {activeTab === 'updates' && (
-              <div className="space-y-6">
                 {/* Add New Update */}
                 <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2 text-gray-900 dark:text-white">
                       <Plus className="h-5 w-5" />
-                      <span>Publish New Update</span>
+                      <span>Publish Progress Update</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <form onSubmit={handleAddUpdate} className="space-y-4">
-                      <div>
-                        <Label htmlFor="updateTitle" className="text-gray-900 dark:text-blue-300 font-semibold">Title</Label>
-                        <Input
-                          id="updateTitle"
-                          value={newUpdate.title}
-                          onChange={(e) => setNewUpdate({...newUpdate, title: e.target.value})}
-                          placeholder="Update title"
-                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2"
-                          required
-                        />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="updateTitle" className="text-gray-900 dark:text-blue-300 font-semibold">Title</Label>
+                          <Input
+                            id="updateTitle"
+                            value={newUpdate.title}
+                            onChange={(e) => setNewUpdate({...newUpdate, title: e.target.value})}
+                            placeholder="Update title"
+                            className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="updateApartment" className="text-gray-900 dark:text-blue-300 font-semibold">Apartment</Label>
+                          <select
+                            id="updateApartment"
+                            value={newUpdate.apartmentNumber}
+                            onChange={(e) => setNewUpdate({...newUpdate, apartmentNumber: e.target.value})}
+                            className="w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white mt-2"
+                          >
+                            <option value="All Units">All Units</option>
+                            {apartments.map(apt => (
+                              <option key={apt.id} value={apt.number}>{apt.number}</option>
+                            ))}
+                          </select>
+                        </div>
                       </div>
                       <div>
-                        <Label htmlFor="updateDescription" className="text-gray-900 dark:text-blue-300 font-semib old">Description</Label>
+                        <Label htmlFor="updateDescription" className="text-gray-900 dark:text-blue-300 font-semibold">Description</Label>
                         <Textarea
                           id="updateDescription"
                           value={newUpdate.description}
@@ -1054,6 +758,7 @@ const AdminDashboardContent = () => {
                           <option value="maintenance">Maintenance</option>
                           <option value="amenity">Amenity</option>
                           <option value="security">Security</option>
+                          <option value="construction">Construction</option>
                         </select>
                       </div>
                       <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
@@ -1080,7 +785,10 @@ const AdminDashboardContent = () => {
                               <div>
                                 <h3 className="font-semibold text-gray-900 dark:text-white">{update.title}</h3>
                                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{update.description}</p>
-                                <span className="text-xs text-gray-500">{update.date}</span>
+                                <div className="flex items-center space-x-4 mt-2">
+                                  <span className="text-xs text-gray-500">{update.date}</span>
+                                  <Badge variant="outline">{update.apartmentNumber}</Badge>
+                                </div>
                               </div>
                             </div>
                             <div className="flex space-x-2">
@@ -1186,6 +894,75 @@ const AdminDashboardContent = () => {
                           </div>
                         </div>
                       ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {activeTab === 'payment-management' && (
+              <div className="space-y-6">
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                  <CardHeader>
+                    <CardTitle className="text-gray-900 dark:text-white">Payment Management</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                      <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg text-center">
+                        <h3 className="font-semibold text-gray-900 dark:text-white">Paid Up</h3>
+                        <p className="text-2xl font-bold text-green-600">2</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Residents</p>
+                      </div>
+                      <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg text-center">
+                        <h3 className="font-semibold text-gray-900 dark:text-white">Overdue</h3>
+                        <p className="text-2xl font-bold text-red-600">1</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Residents</p>
+                      </div>
+                      <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
+                        <h3 className="font-semibold text-gray-900 dark:text-white">Total Revenue</h3>
+                        <p className="text-2xl font-bold text-blue-600">$2.4M</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">This Month</p>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b border-gray-200 dark:border-gray-700">
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Resident</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Apartment</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Amount Due</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Due Date</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Status</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {residents.map((resident) => (
+                            <tr key={resident.id} className="border-b border-gray-100 dark:border-gray-800">
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{resident.name}</td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{resident.apartmentNumber}</td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">$42,500</td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">2025-01-15</td>
+                              <td className="p-3">
+                                <Badge className={resident.paymentStatus === 'Current' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}>
+                                  {resident.paymentStatus}
+                                </Badge>
+                              </td>
+                              <td className="p-3">
+                                <div className="flex space-x-2">
+                                  <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600">
+                                    <FileText className="h-3 w-3" />
+                                  </Button>
+                                  <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600">
+                                    <MessageSquare className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </CardContent>
                 </Card>

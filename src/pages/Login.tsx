@@ -87,9 +87,9 @@ const LoginContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-blue-200 to-blue-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-6">
+    <div className={`min-h-screen flex items-center justify-center p-6 ${theme === 'dark' ? 'gradient-bg-dark' : 'gradient-bg-light'}`}>
       <div className="w-full max-w-md">
-        <Card className="bg-white/80 dark:bg-black/80 backdrop-blur-lg border-blue-200 dark:border-gray-600 shadow-2xl">
+        <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-2xl">
           <CardHeader className="text-center">
             <div className="flex justify-between items-center mb-4">
               <div className="flex-1"></div>
