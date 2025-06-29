@@ -103,23 +103,23 @@ All colors MUST be HSL.
 @layer base {
   html {
     font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, 'sans-serif';
-    transition: all 0.3s ease-out;
   }
   
   * {
     @apply border-border;
-    transition: color 0.3s ease-out, 
-                background-color 0.3s ease-out, 
-                border-color 0.3s ease-out,
-                box-shadow 0.3s ease-out,
-                opacity 0.3s ease-out,
-                transform 0.3s ease-out;
+    /* INSTANT theme transitions - NO DELAYS */
+    transition: color 0.15s ease-out, 
+                background-color 0.15s ease-out, 
+                border-color 0.15s ease-out,
+                box-shadow 0.15s ease-out;
+    /* NO opacity or transform transitions that could hide content */
   }
 
   body {
     @apply bg-background text-foreground;
     cursor: none !important; /* Force hide system cursor */
-    transition: all 0.3s ease-out;
+    /* INSTANT background transition */
+    transition: background-color 0.15s ease-out, color 0.15s ease-out;
   }
 
   /* Hide cursor on all elements */
@@ -137,7 +137,8 @@ All colors MUST be HSL.
     rgba(147, 197, 253, 0.15) 75%, /* Light blue-300 with transparency */
     rgba(59, 130, 246, 0.1) 100%   /* Light blue-500 with transparency */
   );
-  transition: all 0.3s ease-out;
+  /* INSTANT background transition */
+  transition: background 0.15s ease-out;
 }
 
 .gradient-bg-dark {
@@ -148,13 +149,15 @@ All colors MUST be HSL.
     rgba(59, 130, 246, 0.2) 75%,   /* Blue-500 with transparency */
     rgba(30, 64, 175, 0.3) 100%    /* Dark blue-800 with transparency */
   );
-  transition: all 0.3s ease-out;
+  /* INSTANT background transition */
+  transition: background 0.15s ease-out;
 }
 
 .glass-effect {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  transition: all 0.3s ease-out;
+  /* INSTANT backdrop filter transition */
+  transition: backdrop-filter 0.15s ease-out;
 }
 
 /* Custom Mouse Cursor with Blue/Yellow Glow Effect - Real-time following */
@@ -235,66 +238,35 @@ All colors MUST be HSL.
   filter: brightness(1.3);
 }
 
-/* Fast theme transition effects for both light and dark modes - NO CONTENT HIDING */
-.light-mode-fade {
-  animation: lightModeFadeIn 0.3s ease-out;
+/* INSTANT theme transitions - NO CONTENT HIDING OR OPACITY CHANGES */
+.instant-theme-transition {
+  /* Only transition colors and backgrounds - NO opacity, transform, or other properties that hide content */
+  transition: color 0.15s ease-out, 
+              background-color 0.15s ease-out, 
+              border-color 0.15s ease-out,
+              box-shadow 0.15s ease-out,
+              fill 0.15s ease-out,
+              stroke 0.15s ease-out;
 }
 
-.dark-mode-fade {
-  animation: darkModeFadeIn 0.3s ease-out;
+/* Apply instant transitions to all text elements */
+h1, h2, h3, h4, h5, h6, p, span, div, a, button, input, textarea, select, label {
+  transition: color 0.15s ease-out, 
+              background-color 0.15s ease-out, 
+              border-color 0.15s ease-out;
 }
 
-@keyframes lightModeFadeIn {
-  0% {
-    filter: brightness(0.95) contrast(1.02);
-  }
-  100% {
-    filter: brightness(1) contrast(1);
-  }
+/* Apply instant transitions to all containers and cards */
+.card, .glass-effect, main, section, article, header, footer, nav {
+  transition: background-color 0.15s ease-out, 
+              border-color 0.15s ease-out,
+              box-shadow 0.15s ease-out;
 }
 
-@keyframes darkModeFadeIn {
-  0% {
-    filter: brightness(1.05) contrast(0.98);
-  }
-  100% {
-    filter: brightness(1) contrast(1);
-  }
-}
-
-/* Fast content animation for theme switches - NO OPACITY CHANGES */
-.content-fade-in {
-  animation: contentFadeIn 0.3s ease-out;
-}
-
-@keyframes contentFadeIn {
-  0% {
-    transform: translateY(2px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-/* Fast theme transition for all elements */
-.theme-transition {
-  transition: all 0.3s ease-out;
-}
-
-/* Enhanced transitions for specific elements */
-button, input, textarea, select, .card, .glass-effect {
-  transition: all 0.3s ease-out;
-}
-
-/* Fast color transitions for text and backgrounds */
-h1, h2, h3, h4, h5, h6, p, span, div {
-  transition: color 0.3s ease-out;
-}
-
-/* Fast border and shadow transitions */
+/* Apply instant transitions to borders and shadows */
 .border, .shadow, .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl {
-  transition: border-color 0.3s ease-out, 
-              box-shadow 0.3s ease-out;
+  transition: border-color 0.15s ease-out, 
+              box-shadow 0.15s ease-out;
 }
 
 /* Ensure cursor is hidden on all interactive elements */
@@ -311,29 +283,51 @@ button, a, input, textarea, select, [role="button"], .cursor-pointer {
   background: rgba(59, 130, 246, 0.3);
 }
 
-/* Fast transitions for cards and containers */
-.card-transition {
-  transition: all 0.3s ease-out;
+/* INSTANT transitions for interactive elements */
+button, input, textarea, select {
+  transition: color 0.15s ease-out, 
+              background-color 0.15s ease-out, 
+              border-color 0.15s ease-out,
+              box-shadow 0.15s ease-out;
 }
 
-/* Background pattern transitions */
-.bg-pattern-transition {
-  transition: background-image 0.3s ease-out,
-              background-color 0.3s ease-out;
-}
-
-/* Icon and image transitions */
+/* INSTANT transitions for icons and images */
 svg, img {
-  transition: filter 0.3s ease-out,
-              opacity 0.3s ease-out;
+  transition: filter 0.15s ease-out;
+  /* NO opacity transitions that could hide content */
 }
 
-/* Progress bar transitions */
-.progress-transition {
-  transition: all 0.3s ease-out;
+/* INSTANT transitions for badges and status indicators */
+.badge, [class*="badge"] {
+  transition: color 0.15s ease-out, 
+              background-color 0.15s ease-out, 
+              border-color 0.15s ease-out;
 }
 
-/* Badge and status indicator transitions */
-.badge-transition {
-  transition: all 0.3s ease-out;
+/* INSTANT transitions for progress bars */
+.progress, [class*="progress"] {
+  transition: background-color 0.15s ease-out, 
+              border-color 0.15s ease-out;
+}
+
+/* Remove any existing animation classes that might hide content */
+.no-content-hiding {
+  /* Ensure content is always visible */
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+/* Override any potential hiding animations */
+* {
+  /* Prevent any accidental content hiding */
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Specific overrides for theme transition elements */
+.theme-transition * {
+  /* Force all content to remain visible during theme transitions */
+  opacity: 1 !important;
+  visibility: visible !important;
 }

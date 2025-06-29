@@ -18,49 +18,31 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     localStorage.setItem('theme', theme);
     
-    // Add fast transition class to document
-    document.documentElement.classList.add('theme-transition');
-    
-    // Apply theme with fast transition and fade effect for BOTH modes - NO CONTENT HIDING
+    // INSTANT theme application - NO DELAYS OR ANIMATIONS
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
-      document.body.classList.remove('light-mode-fade');
-      document.body.classList.add('dark-mode-fade');
-      
-      // Add subtle content animation to all major content containers - NO OPACITY CHANGES
-      const contentElements = document.querySelectorAll('.card, .glass-effect, main, section, article');
-      contentElements.forEach(el => {
-        el.classList.remove('content-fade-in');
-        // Force reflow
-        el.offsetHeight;
-        el.classList.add('content-fade-in');
-      });
     } else {
       document.documentElement.classList.remove('dark');
-      document.body.classList.remove('dark-mode-fade');
-      document.body.classList.add('light-mode-fade');
-      
-      // Add subtle content animation to all major content containers - NO OPACITY CHANGES
-      const contentElements = document.querySelectorAll('.card, .glass-effect, main, section, article');
-      contentElements.forEach(el => {
-        el.classList.remove('content-fade-in');
-        // Force reflow
-        el.offsetHeight;
-        el.classList.add('content-fade-in');
-      });
     }
 
-    // Remove transition and fade classes after animation completes (much faster now)
+    // Apply instant transition class to all elements
+    document.documentElement.classList.add('instant-theme-transition');
+    
+    // Force all content to remain visible during theme switch
+    const allElements = document.querySelectorAll('*');
+    allElements.forEach(el => {
+      (el as HTMLElement).classList.add('no-content-hiding');
+    });
+
+    // Remove transition classes after a very short time (just enough for color changes)
     const timeout = setTimeout(() => {
-      document.documentElement.classList.remove('theme-transition');
-      document.body.classList.remove('dark-mode-fade', 'light-mode-fade');
+      document.documentElement.classList.remove('instant-theme-transition');
       
-      // Remove content animation classes
-      const contentElements = document.querySelectorAll('.content-fade-in');
-      contentElements.forEach(el => {
-        el.classList.remove('content-fade-in');
+      // Remove no-content-hiding classes
+      allElements.forEach(el => {
+        (el as HTMLElement).classList.remove('no-content-hiding');
       });
-    }, 300); // Reduced to 300ms to match CSS transition duration
+    }, 150); // Very short - just enough for color transitions
 
     return () => clearTimeout(timeout);
   }, [theme]);
