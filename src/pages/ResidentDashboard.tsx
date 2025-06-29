@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
+import { MouseGlow } from '@/components/MouseGlow';
 import { 
   Building2, 
   User, 
@@ -200,6 +201,8 @@ const ResidentDashboardContent = () => {
 
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'gradient-bg-dark' : 'gradient-bg-light'}`}>
+      <MouseGlow />
+      
       {/* Header */}
       <div className="bg-white/80 dark:bg-gray-900/90 glass-effect shadow-lg border-b border-blue-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-6 py-4">
@@ -214,14 +217,14 @@ const ResidentDashboardContent = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={toggleTheme}
-                className="text-gray-800 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-300 transition-colors p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700/50"
+                className="text-gray-800 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-300 transition-colors p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700/50 cursor-pointer"
               >
                 {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </button>
               <Button 
                 onClick={handleLogout}
                 variant="outline"
-                className="flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 border-blue-200 dark:border-gray-600"
+                className="flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 border-blue-200 dark:border-gray-600 cursor-pointer"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
@@ -245,7 +248,7 @@ const ResidentDashboardContent = () => {
               <CardContent className="space-y-2">
                 <Button
                   variant={activeTab === 'overview' ? 'default' : 'ghost'}
-                  className={`w-full justify-start ${activeTab === 'overview' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  className={`w-full justify-start cursor-pointer ${activeTab === 'overview' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
                   onClick={() => setActiveTab('overview')}
                 >
                   <Home className="h-4 w-4 mr-2" />
@@ -253,7 +256,7 @@ const ResidentDashboardContent = () => {
                 </Button>
                 <Button
                   variant={activeTab === 'progress' ? 'default' : 'ghost'}
-                  className={`w-full justify-start ${activeTab === 'progress' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  className={`w-full justify-start cursor-pointer ${activeTab === 'progress' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
                   onClick={() => setActiveTab('progress')}
                 >
                   <Target className="h-4 w-4 mr-2" />
@@ -261,7 +264,7 @@ const ResidentDashboardContent = () => {
                 </Button>
                 <Button
                   variant={activeTab === 'payments' ? 'default' : 'ghost'}
-                  className={`w-full justify-start ${activeTab === 'payments' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  className={`w-full justify-start cursor-pointer ${activeTab === 'payments' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
                   onClick={() => setActiveTab('payments')}
                 >
                   <CreditCard className="h-4 w-4 mr-2" />
@@ -269,7 +272,7 @@ const ResidentDashboardContent = () => {
                 </Button>
                 <Button
                   variant={activeTab === 'documents' ? 'default' : 'ghost'}
-                  className={`w-full justify-start ${activeTab === 'documents' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  className={`w-full justify-start cursor-pointer ${activeTab === 'documents' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
                   onClick={() => setActiveTab('documents')}
                 >
                   <FileText className="h-4 w-4 mr-2" />
@@ -277,7 +280,7 @@ const ResidentDashboardContent = () => {
                 </Button>
                 <Button
                   variant={activeTab === 'updates' ? 'default' : 'ghost'}
-                  className={`w-full justify-start ${activeTab === 'updates' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  className={`w-full justify-start cursor-pointer ${activeTab === 'updates' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
                   onClick={() => setActiveTab('updates')}
                 >
                   <Bell className="h-4 w-4 mr-2" />
@@ -285,7 +288,7 @@ const ResidentDashboardContent = () => {
                 </Button>
                 <Button
                   variant={activeTab === 'announcements' ? 'default' : 'ghost'}
-                  className={`w-full justify-start ${activeTab === 'announcements' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  className={`w-full justify-start cursor-pointer ${activeTab === 'announcements' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
                   onClick={() => setActiveTab('announcements')}
                 >
                   <Calendar className="h-4 w-4 mr-2" />
@@ -293,7 +296,7 @@ const ResidentDashboardContent = () => {
                 </Button>
                 <Button
                   variant={activeTab === 'support' ? 'default' : 'ghost'}
-                  className={`w-full justify-start ${activeTab === 'support' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  className={`w-full justify-start cursor-pointer ${activeTab === 'support' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
                   onClick={() => setActiveTab('support')}
                 >
                   <MessageSquare className="h-4 w-4 mr-2" />
@@ -588,10 +591,10 @@ const ResidentDashboardContent = () => {
                               </div>
                             </div>
                             <div className="flex space-x-2">
-                              <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600">
+                              <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600 cursor-pointer">
                                 <Eye className="h-3 w-3" />
                               </Button>
-                              <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600">
+                              <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600 cursor-pointer">
                                 <Download className="h-3 w-3" />
                               </Button>
                             </div>
@@ -713,7 +716,7 @@ const ResidentDashboardContent = () => {
                         <Input
                           id="subject"
                           placeholder="Brief description of your request"
-                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-1"
+                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-1 cursor-pointer"
                         />
                       </div>
                       <div>
@@ -724,11 +727,12 @@ const ResidentDashboardContent = () => {
                           onChange={(e) => setSupportMessage(e.target.value)}
                           placeholder="Please describe your request or issue in detail..."
                           rows={4}
-                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-1"
+                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-1 cursor-pointer"
                         />
                       </div>
-                      <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                      <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
                         Submit Support Request
+                      
                       </Button>
                     </form>
                   </CardContent>

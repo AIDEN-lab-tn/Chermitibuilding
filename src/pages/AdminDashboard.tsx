@@ -27,7 +27,15 @@ import {
   DollarSign,
   TrendingUp,
   Sun,
-  Moon
+  Moon,
+  UserPlus,
+  CreditCard,
+  FileText,
+  MapPin,
+  Phone,
+  Mail,
+  Eye,
+  Search
 } from 'lucide-react';
 import logo from '/public/logo.png';
 
@@ -43,31 +51,106 @@ const AdminDashboardContent = () => {
       id: '1',
       name: 'John Smith',
       email: 'john@example.com',
+      phone: '+1 (555) 123-4567',
       apartmentNumber: 'A-2501',
       floor: 25,
       status: 'Owner',
       purchaseDate: '2024-01-15',
-      paymentStatus: 'Current'
+      paymentStatus: 'Current',
+      totalPaid: 637500,
+      totalAmount: 850000,
+      lastPayment: '2024-12-15'
     },
     {
       id: '2',
       name: 'Sarah Johnson',
       email: 'sarah@example.com',
+      phone: '+1 (555) 234-5678',
       apartmentNumber: 'B-1203',
       floor: 12,
       status: 'Owner',
       purchaseDate: '2024-03-20',
-      paymentStatus: 'Current'
+      paymentStatus: 'Current',
+      totalPaid: 425000,
+      totalAmount: 650000,
+      lastPayment: '2024-12-10'
     },
     {
       id: '3',
       name: 'Mike Wilson',
       email: 'mike@example.com',
+      phone: '+1 (555) 345-6789',
       apartmentNumber: 'C-3401',
       floor: 34,
       status: 'Renter',
       purchaseDate: '2024-06-10',
-      paymentStatus: 'Overdue'
+      paymentStatus: 'Overdue',
+      totalPaid: 180000,
+      totalAmount: 750000,
+      lastPayment: '2024-10-15'
+    }
+  ]);
+
+  const [apartments, setApartments] = useState([
+    {
+      id: '1',
+      number: 'A-2501',
+      floor: 25,
+      type: 'Penthouse',
+      size: '2500 sq ft',
+      bedrooms: 3,
+      bathrooms: 3,
+      price: 850000,
+      status: 'Occupied',
+      resident: 'John Smith'
+    },
+    {
+      id: '2',
+      number: 'B-1203',
+      floor: 12,
+      type: 'Luxury',
+      size: '1800 sq ft',
+      bedrooms: 2,
+      bathrooms: 2,
+      price: 650000,
+      status: 'Occupied',
+      resident: 'Sarah Johnson'
+    },
+    {
+      id: '3',
+      number: 'C-3401',
+      floor: 34,
+      type: 'Premium',
+      size: '2200 sq ft',
+      bedrooms: 3,
+      bathrooms: 2,
+      price: 750000,
+      status: 'Occupied',
+      resident: 'Mike Wilson'
+    },
+    {
+      id: '4',
+      number: 'A-4502',
+      floor: 45,
+      type: 'Penthouse',
+      size: '3000 sq ft',
+      bedrooms: 4,
+      bathrooms: 4,
+      price: 1200000,
+      status: 'Available',
+      resident: null
+    },
+    {
+      id: '5',
+      number: 'B-2105',
+      floor: 21,
+      type: 'Luxury',
+      size: '1600 sq ft',
+      bedrooms: 2,
+      bathrooms: 2,
+      price: 580000,
+      status: 'Available',
+      resident: null
     }
   ]);
 
@@ -78,7 +161,8 @@ const AdminDashboardContent = () => {
       title: 'Elevator Maintenance Completed',
       description: 'All elevators have been serviced and are operating normally.',
       type: 'maintenance',
-      status: 'published'
+      status: 'published',
+      apartments: ['All Units']
     },
     {
       id: 2,
@@ -86,7 +170,8 @@ const AdminDashboardContent = () => {
       title: 'New Gym Equipment Installed',
       description: 'State-of-the-art fitness equipment has been added to the rooftop gym.',
       type: 'amenity',
-      status: 'published'
+      status: 'published',
+      apartments: ['All Units']
     }
   ]);
 
@@ -109,10 +194,29 @@ const AdminDashboardContent = () => {
     }
   ]);
 
+  const [newResident, setNewResident] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    apartmentNumber: '',
+    status: 'Owner'
+  });
+
+  const [newApartment, setNewApartment] = useState({
+    number: '',
+    floor: '',
+    type: 'Luxury',
+    size: '',
+    bedrooms: '',
+    bathrooms: '',
+    price: ''
+  });
+
   const [newUpdate, setNewUpdate] = useState({
     title: '',
     description: '',
-    type: 'maintenance'
+    type: 'maintenance',
+    apartments: ['All Units']
   });
 
   const [newAnnouncement, setNewAnnouncement] = useState({
@@ -120,6 +224,8 @@ const AdminDashboardContent = () => {
     content: '',
     priority: 'medium'
   });
+
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const storedUser = localStorage.getItem('userData');
@@ -140,6 +246,47 @@ const AdminDashboardContent = () => {
     navigate('/');
   };
 
+  const handleAddResident = (e: React.FormEvent) => {
+    e.preventDefault();
+    const resident = {
+      id: Date.now().toString(),
+      ...newResident,
+      purchaseDate: new Date().toISOString().split('T')[0],
+      paymentStatus: 'Current',
+      totalPaid: 0,
+      totalAmount: apartments.find(apt => apt.number === newResident.apartmentNumber)?.price || 0,
+      lastPayment: null
+    };
+    setResidents([...residents, resident]);
+    
+    // Update apartment status
+    setApartments(apartments.map(apt => 
+      apt.number === newResident.apartmentNumber 
+        ? { ...apt, status: 'Occupied', resident: newResident.name }
+        : apt
+    ));
+    
+    setNewResident({ name: '', email: '', phone: '', apartmentNumber: '', status: 'Owner' });
+    alert('Resident added successfully!');
+  };
+
+  const handleAddApartment = (e: React.FormEvent) => {
+    e.preventDefault();
+    const apartment = {
+      id: Date.now().toString(),
+      ...newApartment,
+      floor: parseInt(newApartment.floor),
+      bedrooms: parseInt(newApartment.bedrooms),
+      bathrooms: parseInt(newApartment.bathrooms),
+      price: parseInt(newApartment.price),
+      status: 'Available',
+      resident: null
+    };
+    setApartments([...apartments, apartment]);
+    setNewApartment({ number: '', floor: '', type: 'Luxury', size: '', bedrooms: '', bathrooms: '', price: '' });
+    alert('Apartment added successfully!');
+  };
+
   const handleAddUpdate = (e: React.FormEvent) => {
     e.preventDefault();
     const update = {
@@ -148,10 +295,11 @@ const AdminDashboardContent = () => {
       title: newUpdate.title,
       description: newUpdate.description,
       type: newUpdate.type,
-      status: 'published'
+      status: 'published',
+      apartments: newUpdate.apartments
     };
     setUpdates([update, ...updates]);
-    setNewUpdate({ title: '', description: '', type: 'maintenance' });
+    setNewUpdate({ title: '', description: '', type: 'maintenance', apartments: ['All Units'] });
     alert('Update published successfully!');
   };
 
@@ -180,6 +328,25 @@ const AdminDashboardContent = () => {
     alert('Announcement deleted successfully!');
   };
 
+  const deleteResident = (id: string) => {
+    const resident = residents.find(r => r.id === id);
+    if (resident) {
+      // Update apartment status to available
+      setApartments(apartments.map(apt => 
+        apt.number === resident.apartmentNumber 
+          ? { ...apt, status: 'Available', resident: null }
+          : apt
+      ));
+    }
+    setResidents(residents.filter(resident => resident.id !== id));
+    alert('Resident removed successfully!');
+  };
+
+  const deleteApartment = (id: string) => {
+    setApartments(apartments.filter(apartment => apartment.id !== id));
+    alert('Apartment deleted successfully!');
+  };
+
   const getStatusIcon = (type: string) => {
     switch (type) {
       case 'maintenance': return <Settings className="h-4 w-4" />;
@@ -197,6 +364,29 @@ const AdminDashboardContent = () => {
       default: return 'bg-gray-100 text-gray-800 border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600';
     }
   };
+
+  const getPaymentStatusColor = (status: string) => {
+    switch (status) {
+      case 'Current': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300';
+      case 'Overdue': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
+      case 'Pending': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+    }
+  };
+
+  const filteredResidents = residents.filter(resident =>
+    resident.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    resident.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    resident.apartmentNumber.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredApartments = apartments.filter(apartment =>
+    apartment.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    apartment.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (apartment.resident && apartment.resident.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  const availableApartments = apartments.filter(apt => apt.status === 'Available');
 
   if (!userData) {
     return <div>Loading...</div>;
@@ -258,20 +448,28 @@ const AdminDashboardContent = () => {
                   Overview
                 </Button>
                 <Button
-                  variant={activeTab === 'residents' ? 'default' : 'ghost'}
-                  className={`w-full justify-start cursor-pointer ${activeTab === 'residents' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
-                  onClick={() => setActiveTab('residents')}
+                  variant={activeTab === 'property-management' ? 'default' : 'ghost'}
+                  className={`w-full justify-start cursor-pointer ${activeTab === 'property-management' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  onClick={() => setActiveTab('property-management')}
                 >
-                  <Users className="h-4 w-4 mr-2" />
-                  Residents
+                  <Building2 className="h-4 w-4 mr-2" />
+                  Property Management
                 </Button>
                 <Button
-                  variant={activeTab === 'updates' ? 'default' : 'ghost'}
-                  className={`w-full justify-start cursor-pointer ${activeTab === 'updates' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
-                  onClick={() => setActiveTab('updates')}
+                  variant={activeTab === 'client-management' ? 'default' : 'ghost'}
+                  className={`w-full justify-start cursor-pointer ${activeTab === 'client-management' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  onClick={() => setActiveTab('client-management')}
+                >
+                  <Users className="h-4 w-4 mr-2" />
+                  Client Management
+                </Button>
+                <Button
+                  variant={activeTab === 'progress-updates' ? 'default' : 'ghost'}
+                  className={`w-full justify-start cursor-pointer ${activeTab === 'progress-updates' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  onClick={() => setActiveTab('progress-updates')}
                 >
                   <Bell className="h-4 w-4 mr-2" />
-                  Manage Updates
+                  Progress Updates
                 </Button>
                 <Button
                   variant={activeTab === 'announcements' ? 'default' : 'ghost'}
@@ -280,6 +478,14 @@ const AdminDashboardContent = () => {
                 >
                   <Calendar className="h-4 w-4 mr-2" />
                   Announcements
+                </Button>
+                <Button
+                  variant={activeTab === 'payment-management' ? 'default' : 'ghost'}
+                  className={`w-full justify-start cursor-pointer ${activeTab === 'payment-management' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  onClick={() => setActiveTab('payment-management')}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Payment Management
                 </Button>
                 <Button
                   variant={activeTab === 'analytics' ? 'default' : 'ghost'}
@@ -314,10 +520,10 @@ const AdminDashboardContent = () => {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Active Updates</p>
-                          <p className="text-2xl font-bold text-gray-900 dark:text-white">{updates.length}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Total Apartments</p>
+                          <p className="text-2xl font-bold text-gray-900 dark:text-white">{apartments.length}</p>
                         </div>
-                        <Bell className="h-8 w-8 text-green-600" />
+                        <Building2 className="h-8 w-8 text-green-600" />
                       </div>
                     </CardContent>
                   </Card>
@@ -325,10 +531,10 @@ const AdminDashboardContent = () => {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Announcements</p>
-                          <p className="text-2xl font-bold text-gray-900 dark:text-white">{announcements.length}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Available Units</p>
+                          <p className="text-2xl font-bold text-gray-900 dark:text-white">{availableApartments.length}</p>
                         </div>
-                        <Calendar className="h-8 w-8 text-purple-600" />
+                        <Home className="h-8 w-8 text-purple-600" />
                       </div>
                     </CardContent>
                   </Card>
@@ -336,7 +542,7 @@ const AdminDashboardContent = () => {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Revenue</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Total Revenue</p>
                           <p className="text-2xl font-bold text-gray-900 dark:text-white">$2.4M</p>
                         </div>
                         <DollarSign className="h-8 w-8 text-yellow-600" />
@@ -370,48 +576,162 @@ const AdminDashboardContent = () => {
               </div>
             )}
 
-            {activeTab === 'residents' && (
+            {activeTab === 'property-management' && (
               <div className="space-y-6">
+                {/* Add New Apartment */}
                 <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
                   <CardHeader>
-                    <CardTitle className="text-gray-900 dark:text-white">Resident Management</CardTitle>
+                    <CardTitle className="flex items-center space-x-2 text-gray-900 dark:text-white">
+                      <Plus className="h-5 w-5" />
+                      <span>Add New Apartment</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleAddApartment} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="apartmentNumber" className="text-gray-900 dark:text-blue-300 font-semibold">Apartment Number</Label>
+                        <Input
+                          id="apartmentNumber"
+                          value={newApartment.number}
+                          onChange={(e) => setNewApartment({...newApartment, number: e.target.value})}
+                          placeholder="e.g., A-2501"
+                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="floor" className="text-gray-900 dark:text-blue-300 font-semibold">Floor</Label>
+                        <Input
+                          id="floor"
+                          type="number"
+                          value={newApartment.floor}
+                          onChange={(e) => setNewApartment({...newApartment, floor: e.target.value})}
+                          placeholder="25"
+                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="type" className="text-gray-900 dark:text-blue-300 font-semibold">Type</Label>
+                        <select
+                          id="type"
+                          value={newApartment.type}
+                          onChange={(e) => setNewApartment({...newApartment, type: e.target.value})}
+                          className="w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                        >
+                          <option value="Luxury">Luxury</option>
+                          <option value="Premium">Premium</option>
+                          <option value="Penthouse">Penthouse</option>
+                        </select>
+                      </div>
+                      <div>
+                        <Label htmlFor="size" className="text-gray-900 dark:text-blue-300 font-semibold">Size</Label>
+                        <Input
+                          id="size"
+                          value={newApartment.size}
+                          onChange={(e) => setNewApartment({...newApartment, size: e.target.value})}
+                          placeholder="2500 sq ft"
+                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="bedrooms" className="text-gray-900 dark:text-blue-300 font-semibold">Bedrooms</Label>
+                        <Input
+                          id="bedrooms"
+                          type="number"
+                          value={newApartment.bedrooms}
+                          onChange={(e) => setNewApartment({...newApartment, bedrooms: e.target.value})}
+                          placeholder="3"
+                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="bathrooms" className="text-gray-900 dark:text-blue-300 font-semibold">Bathrooms</Label>
+                        <Input
+                          id="bathrooms"
+                          type="number"
+                          value={newApartment.bathrooms}
+                          onChange={(e) => setNewApartment({...newApartment, bathrooms: e.target.value})}
+                          placeholder="3"
+                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                          required
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <Label htmlFor="price" className="text-gray-900 dark:text-blue-300 font-semibold">Price ($)</Label>
+                        <Input
+                          id="price"
+                          type="number"
+                          value={newApartment.price}
+                          onChange={(e) => setNewApartment({...newApartment, price: e.target.value})}
+                          placeholder="850000"
+                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                          required
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
+                          Add Apartment
+                        </Button>
+                      </div>
+                    </form>
+                  </CardContent>
+                </Card>
+
+                {/* Apartments List */}
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                  <CardHeader>
+                    <div className="flex justify-between items-center">
+                      <CardTitle className="text-gray-900 dark:text-white">Apartment Management</CardTitle>
+                      <div className="flex items-center space-x-2">
+                        <Search className="h-4 w-4 text-gray-400" />
+                        <Input
+                          placeholder="Search apartments..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="w-64 cursor-pointer"
+                        />
+                      </div>
+                    </div>
                   </CardHeader>
                   <CardContent>
                     <div className="overflow-x-auto">
                       <table className="w-full">
                         <thead>
                           <tr className="border-b border-gray-200 dark:border-gray-700">
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Name</th>
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Email</th>
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Apartment</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Unit</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Floor</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Type</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Size</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Price</th>
                             <th className="text-left p-3 text-gray-900 dark:text-white">Status</th>
-                            <th className="text-left p-3 text-gray-900 dark:text-white">Payment</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Resident</th>
                             <th className="text-left p-3 text-gray-900 dark:text-white">Actions</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {residents.map((resident) => (
-                            <tr key={resident.id} className="border-b border-gray-100 dark:border-gray-800">
-                              <td className="p-3 text-gray-800 dark:text-gray-300">{resident.name}</td>
-                              <td className="p-3 text-gray-800 dark:text-gray-300">{resident.email}</td>
-                              <td className="p-3 text-gray-800 dark:text-gray-300">{resident.apartmentNumber}</td>
+                          {filteredApartments.map((apartment) => (
+                            <tr key={apartment.id} className="border-b border-gray-100 dark:border-gray-800">
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{apartment.number}</td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{apartment.floor}</td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{apartment.type}</td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{apartment.size}</td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">${apartment.price.toLocaleString()}</td>
                               <td className="p-3">
-                                <Badge className={resident.status === 'Owner' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'}>
-                                  {resident.status}
+                                <Badge className={apartment.status === 'Available' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'}>
+                                  {apartment.status}
                                 </Badge>
                               </td>
-                              <td className="p-3">
-                                <Badge className={resident.paymentStatus === 'Current' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}>
-                                  {resident.paymentStatus}
-                                </Badge>
-                              </td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{apartment.resident || 'N/A'}</td>
                               <td className="p-3">
                                 <div className="flex space-x-2">
                                   <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600 cursor-pointer">
                                     <Edit className="h-3 w-3" />
                                   </Button>
-                                  <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600 cursor-pointer">
-                                    <MessageSquare className="h-3 w-3" />
+                                  <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600 cursor-pointer" onClick={() => deleteApartment(apartment.id)}>
+                                    <Trash2 className="h-3 w-3" />
                                   </Button>
                                 </div>
                               </td>
@@ -425,14 +745,185 @@ const AdminDashboardContent = () => {
               </div>
             )}
 
-            {activeTab === 'updates' && (
+            {activeTab === 'client-management' && (
+              <div className="space-y-6">
+                {/* Add New Resident */}
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2 text-gray-900 dark:text-white">
+                      <UserPlus className="h-5 w-5" />
+                      <span>Add New Resident</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleAddResident} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="residentName" className="text-gray-900 dark:text-blue-300 font-semibold">Full Name</Label>
+                        <Input
+                          id="residentName"
+                          value={newResident.name}
+                          onChange={(e) => setNewResident({...newResident, name: e.target.value})}
+                          placeholder="John Smith"
+                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="residentEmail" className="text-gray-900 dark:text-blue-300 font-semibold">Email</Label>
+                        <Input
+                          id="residentEmail"
+                          type="email"
+                          value={newResident.email}
+                          onChange={(e) => setNewResident({...newResident, email: e.target.value})}
+                          placeholder="john@example.com"
+                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="residentPhone" className="text-gray-900 dark:text-blue-300 font-semibold">Phone</Label>
+                        <Input
+                          id="residentPhone"
+                          value={newResident.phone}
+                          onChange={(e) => setNewResident({...newResident, phone: e.target.value})}
+                          placeholder="+1 (555) 123-4567"
+                          className="bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="residentApartment" className="text-gray-900 dark:text-blue-300 font-semibold">Apartment</Label>
+                        <select
+                          id="residentApartment"
+                          value={newResident.apartmentNumber}
+                          onChange={(e) => setNewResident({...newResident, apartmentNumber: e.target.value})}
+                          className="w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                          required
+                        >
+                          <option value="">Select Apartment</option>
+                          {availableApartments.map(apt => (
+                            <option key={apt.id} value={apt.number}>{apt.number} - {apt.type}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <Label htmlFor="residentStatus" className="text-gray-900 dark:text-blue-300 font-semibold">Status</Label>
+                        <select
+                          id="residentStatus"
+                          value={newResident.status}
+                          onChange={(e) => setNewResident({...newResident, status: e.target.value})}
+                          className="w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                        >
+                          <option value="Owner">Owner</option>
+                          <option value="Renter">Renter</option>
+                        </select>
+                      </div>
+                      <div className="md:col-span-2">
+                        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
+                          Add Resident
+                        </Button>
+                      </div>
+                    </form>
+                  </CardContent>
+                </Card>
+
+                {/* Residents List */}
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                  <CardHeader>
+                    <div className="flex justify-between items-center">
+                      <CardTitle className="text-gray-900 dark:text-white">Client Management</CardTitle>
+                      <div className="flex items-center space-x-2">
+                        <Search className="h-4 w-4 text-gray-400" />
+                        <Input
+                          placeholder="Search residents..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="w-64 cursor-pointer"
+                        />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b border-gray-200 dark:border-gray-700">
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Name</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Contact</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Apartment</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Status</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Payment Status</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filteredResidents.map((resident) => (
+                            <tr key={resident.id} className="border-b border-gray-100 dark:border-gray-800">
+                              <td className="p-3">
+                                <div>
+                                  <div className="font-semibold text-gray-900 dark:text-white">{resident.name}</div>
+                                  <div className="text-sm text-gray-600 dark:text-gray-400">Since {resident.purchaseDate}</div>
+                                </div>
+                              </td>
+                              <td className="p-3">
+                                <div className="space-y-1">
+                                  <div className="flex items-center space-x-2">
+                                    <Mail className="h-3 w-3 text-gray-400" />
+                                    <span className="text-sm text-gray-800 dark:text-gray-300">{resident.email}</span>
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <Phone className="h-3 w-3 text-gray-400" />
+                                    <span className="text-sm text-gray-800 dark:text-gray-300">{resident.phone}</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="p-3">
+                                <div className="flex items-center space-x-2">
+                                  <MapPin className="h-3 w-3 text-gray-400" />
+                                  <span className="text-gray-800 dark:text-gray-300">{resident.apartmentNumber}</span>
+                                </div>
+                              </td>
+                              <td className="p-3">
+                                <Badge className={resident.status === 'Owner' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'}>
+                                  {resident.status}
+                                </Badge>
+                              </td>
+                              <td className="p-3">
+                                <Badge className={getPaymentStatusColor(resident.paymentStatus)}>
+                                  {resident.paymentStatus}
+                                </Badge>
+                              </td>
+                              <td className="p-3">
+                                <div className="flex space-x-2">
+                                  <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600 cursor-pointer">
+                                    <Eye className="h-3 w-3" />
+                                  </Button>
+                                  <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600 cursor-pointer">
+                                    <Edit className="h-3 w-3" />
+                                  </Button>
+                                  <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600 cursor-pointer" onClick={() => deleteResident(resident.id)}>
+                                    <Trash2 className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {activeTab === 'progress-updates' && (
               <div className="space-y-6">
                 {/* Add New Update */}
                 <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2 text-gray-900 dark:text-white">
                       <Plus className="h-5 w-5" />
-                      <span>Publish New Update</span>
+                      <span>Publish Progress Update</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -460,18 +951,34 @@ const AdminDashboardContent = () => {
                           required
                         />
                       </div>
-                      <div>
-                        <Label htmlFor="updateType" className="text-gray-900 dark:text-blue-300 font-semibold">Type</Label>
-                        <select
-                          id="updateType"
-                          value={newUpdate.type}
-                          onChange={(e) => setNewUpdate({...newUpdate, type: e.target.value})}
-                          className="w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white mt-2 cursor-pointer"
-                        >
-                          <option value="maintenance">Maintenance</option>
-                          <option value="amenity">Amenity</option>
-                          <option value="security">Security</option>
-                        </select>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="updateType" className="text-gray-900 dark:text-blue-300 font-semibold">Type</Label>
+                          <select
+                            id="updateType"
+                            value={newUpdate.type}
+                            onChange={(e) => setNewUpdate({...newUpdate, type: e.target.value})}
+                            className="w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                          >
+                            <option value="maintenance">Maintenance</option>
+                            <option value="amenity">Amenity</option>
+                            <option value="security">Security</option>
+                          </select>
+                        </div>
+                        <div>
+                          <Label htmlFor="updateApartments" className="text-gray-900 dark:text-blue-300 font-semibold">Target Apartments</Label>
+                          <select
+                            id="updateApartments"
+                            value={newUpdate.apartments[0]}
+                            onChange={(e) => setNewUpdate({...newUpdate, apartments: [e.target.value]})}
+                            className="w-full p-2 border border-gray-400 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white mt-2 cursor-pointer"
+                          >
+                            <option value="All Units">All Units</option>
+                            {apartments.map(apt => (
+                              <option key={apt.id} value={apt.number}>{apt.number}</option>
+                            ))}
+                          </select>
+                        </div>
                       </div>
                       <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
                         Publish Update
@@ -497,7 +1004,12 @@ const AdminDashboardContent = () => {
                               <div>
                                 <h3 className="font-semibold text-gray-900 dark:text-white">{update.title}</h3>
                                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{update.description}</p>
-                                <span className="text-xs text-gray-500">{update.date}</span>
+                                <div className="flex items-center space-x-4 mt-2">
+                                  <span className="text-xs text-gray-500">{update.date}</span>
+                                  <Badge variant="outline" className="text-xs">
+                                    {update.apartments.join(', ')}
+                                  </Badge>
+                                </div>
                               </div>
                             </div>
                             <div className="flex space-x-2">
@@ -609,6 +1121,106 @@ const AdminDashboardContent = () => {
               </div>
             )}
 
+            {activeTab === 'payment-management' && (
+              <div className="space-y-6">
+                {/* Payment Overview */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                    <CardContent className="p-6">
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Total Revenue</p>
+                        <p className="text-2xl font-bold text-green-600">
+                          ${residents.reduce((sum, r) => sum + r.totalPaid, 0).toLocaleString()}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                    <CardContent className="p-6">
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Outstanding</p>
+                        <p className="text-2xl font-bold text-orange-600">
+                          ${residents.reduce((sum, r) => sum + (r.totalAmount - r.totalPaid), 0).toLocaleString()}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                    <CardContent className="p-6">
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Current Payments</p>
+                        <p className="text-2xl font-bold text-green-600">
+                          {residents.filter(r => r.paymentStatus === 'Current').length}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                    <CardContent className="p-6">
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Overdue Payments</p>
+                        <p className="text-2xl font-bold text-red-600">
+                          {residents.filter(r => r.paymentStatus === 'Overdue').length}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Payment Details */}
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                  <CardHeader>
+                    <CardTitle className="text-gray-900 dark:text-white">Payment Management</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b border-gray-200 dark:border-gray-700">
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Resident</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Apartment</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Total Amount</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Paid Amount</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Outstanding</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Status</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Last Payment</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {residents.map((resident) => (
+                            <tr key={resident.id} className="border-b border-gray-100 dark:border-gray-800">
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{resident.name}</td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{resident.apartmentNumber}</td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">${resident.totalAmount.toLocaleString()}</td>
+                              <td className="p-3 text-green-600 font-semibold">${resident.totalPaid.toLocaleString()}</td>
+                              <td className="p-3 text-orange-600 font-semibold">${(resident.totalAmount - resident.totalPaid).toLocaleString()}</td>
+                              <td className="p-3">
+                                <Badge className={getPaymentStatusColor(resident.paymentStatus)}>
+                                  {resident.paymentStatus}
+                                </Badge>
+                              </td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{resident.lastPayment || 'N/A'}</td>
+                              <td className="p-3">
+                                <div className="flex space-x-2">
+                                  <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600 cursor-pointer">
+                                    <Eye className="h-3 w-3" />
+                                  </Button>
+                                  <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600 cursor-pointer">
+                                    <Edit className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
             {activeTab === 'analytics' && (
               <div className="space-y-6">
                 <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
@@ -620,8 +1232,12 @@ const AdminDashboardContent = () => {
                       <div className="space-y-4">
                         <h3 className="font-semibold text-gray-900 dark:text-white">Occupancy Rate</h3>
                         <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                          <div className="text-2xl font-bold text-blue-600">95%</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">180 of 189 units occupied</div>
+                          <div className="text-2xl font-bold text-blue-600">
+                            {Math.round((apartments.filter(apt => apt.status === 'Occupied').length / apartments.length) * 100)}%
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {apartments.filter(apt => apt.status === 'Occupied').length} of {apartments.length} units occupied
+                          </div>
                         </div>
                       </div>
                       <div className="space-y-4">
@@ -632,17 +1248,23 @@ const AdminDashboardContent = () => {
                         </div>
                       </div>
                       <div className="space-y-4">
-                        <h3 className="font-semibold text-gray-900 dark:text-white">Maintenance Requests</h3>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">Payment Collection Rate</h3>
                         <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
-                          <div className="text-2xl font-bold text-yellow-600">23</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">5 pending, 18 completed</div>
+                          <div className="text-2xl font-bold text-yellow-600">
+                            {Math.round((residents.filter(r => r.paymentStatus === 'Current').length / residents.length) * 100)}%
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {residents.filter(r => r.paymentStatus === 'Current').length} of {residents.length} current
+                          </div>
                         </div>
                       </div>
                       <div className="space-y-4">
-                        <h3 className="font-semibold text-gray-900 dark:text-white">Satisfaction Score</h3>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">Average Unit Price</h3>
                         <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                          <div className="text-2xl font-bold text-purple-600">4.8/5</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">Based on 156 reviews</div>
+                          <div className="text-2xl font-bold text-purple-600">
+                            ${Math.round(apartments.reduce((sum, apt) => sum + apt.price, 0) / apartments.length).toLocaleString()}
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">Across all unit types</div>
                         </div>
                       </div>
                     </div>
