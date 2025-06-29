@@ -103,21 +103,23 @@ All colors MUST be HSL.
 @layer base {
   html {
     font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, 'sans-serif';
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   * {
     @apply border-border;
-    transition: color 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
-                background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
-                border-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: color 1s cubic-bezier(0.4, 0, 0.2, 1), 
+                background-color 1s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 1s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 1s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 1s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   body {
     @apply bg-background text-foreground;
     cursor: none !important; /* Force hide system cursor */
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   /* Hide cursor on all elements */
@@ -135,7 +137,7 @@ All colors MUST be HSL.
     rgba(147, 197, 253, 0.15) 75%, /* Light blue-300 with transparency */
     rgba(59, 130, 246, 0.1) 100%   /* Light blue-500 with transparency */
   );
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .gradient-bg-dark {
@@ -146,20 +148,20 @@ All colors MUST be HSL.
     rgba(59, 130, 246, 0.2) 75%,   /* Blue-500 with transparency */
     rgba(30, 64, 175, 0.3) 100%    /* Dark blue-800 with transparency */
   );
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-effect {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Custom Mouse Cursor with Yellow Glow Effect - Replaces system cursor */
+/* Custom Mouse Cursor with Yellow Glow Effect - Single cursor only */
 .cursor-glow {
   position: fixed;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
@@ -178,9 +180,9 @@ All colors MUST be HSL.
     transparent 100%
   );
   box-shadow: 
-    0 0 10px rgba(255, 193, 7, 0.6),
-    0 0 20px rgba(255, 193, 7, 0.4),
-    0 0 30px rgba(255, 193, 7, 0.2);
+    0 0 8px rgba(255, 193, 7, 0.5),
+    0 0 16px rgba(255, 193, 7, 0.3),
+    0 0 24px rgba(255, 193, 7, 0.2);
 }
 
 /* Yellow glow cursor - Dark mode (more intense) */
@@ -193,15 +195,15 @@ All colors MUST be HSL.
     transparent 100%
   );
   box-shadow: 
-    0 0 15px rgba(255, 193, 7, 0.8),
-    0 0 30px rgba(255, 193, 7, 0.6),
-    0 0 45px rgba(255, 193, 7, 0.4),
-    0 0 60px rgba(255, 193, 7, 0.2);
+    0 0 12px rgba(255, 193, 7, 0.7),
+    0 0 24px rgba(255, 193, 7, 0.5),
+    0 0 36px rgba(255, 193, 7, 0.3),
+    0 0 48px rgba(255, 193, 7, 0.2);
 }
 
 /* Hover effect - make cursor larger and more intense */
 .cursor-glow-hover {
-  transform: translate(-50%, -50%) scale(1.5);
+  transform: translate(-50%, -50%) scale(1.4);
   filter: brightness(1.2);
 }
 
@@ -217,7 +219,7 @@ All colors MUST be HSL.
     filter: brightness(1.5);
   }
   50% {
-    transform: translate(-50%, -50%) scale(2);
+    transform: translate(-50%, -50%) scale(1.8);
     filter: brightness(2);
   }
   100% {
@@ -228,75 +230,90 @@ All colors MUST be HSL.
 
 /* Interactive elements cursor */
 .cursor-glow-interactive {
-  transform: translate(-50%, -50%) scale(1.8);
+  transform: translate(-50%, -50%) scale(1.6);
   filter: brightness(1.3);
 }
 
-/* Cursor trail effect with yellow glow */
-.cursor-trail {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 99998;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translate(-50%, -50%);
+/* Theme transition effects for both light and dark modes */
+.light-mode-fade {
+  animation: lightModeFadeIn 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.cursor-trail-light {
-  background: radial-gradient(circle, 
-    rgba(255, 193, 7, 0.5) 0%, 
-    rgba(255, 193, 7, 0.2) 50%, 
-    transparent 100%
-  );
-  box-shadow: 0 0 6px rgba(255, 193, 7, 0.4);
-}
-
-.cursor-trail-dark {
-  background: radial-gradient(circle, 
-    rgba(255, 193, 7, 0.7) 0%, 
-    rgba(255, 193, 7, 0.3) 50%, 
-    transparent 100%
-  );
-  box-shadow: 0 0 8px rgba(255, 193, 7, 0.5);
-}
-
-/* Dark mode fade-in effect */
 .dark-mode-fade {
-  animation: darkModeFadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: darkModeFadeIn 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes lightModeFadeIn {
+  0% {
+    opacity: 0;
+    filter: brightness(0.8) contrast(1.1);
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.7;
+    filter: brightness(1.1) contrast(1.05);
+    transform: scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1) contrast(1);
+    transform: scale(1);
+  }
 }
 
 @keyframes darkModeFadeIn {
   0% {
     opacity: 0;
-    filter: brightness(1.2);
+    filter: brightness(1.2) contrast(0.9);
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.7;
+    filter: brightness(0.9) contrast(1.1);
+    transform: scale(1.01);
   }
   100% {
     opacity: 1;
-    filter: brightness(1);
+    filter: brightness(1) contrast(1);
+    transform: scale(1);
+  }
+}
+
+/* Content animation for theme switches */
+.content-fade-in {
+  animation: contentFadeIn 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes contentFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 /* Smooth theme transition for all elements */
 .theme-transition {
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Enhanced transitions for specific elements */
 button, input, textarea, select, .card, .glass-effect {
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Smooth color transitions for text and backgrounds */
 h1, h2, h3, h4, h5, h6, p, span, div {
-  transition: color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Smooth border and shadow transitions */
 .border, .shadow, .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl {
-  transition: border-color 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
-              box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 1s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Ensure cursor is hidden on all interactive elements */
@@ -311,4 +328,31 @@ button, a, input, textarea, select, [role="button"], .cursor-pointer {
 
 ::-moz-selection {
   background: rgba(59, 130, 246, 0.3);
+}
+
+/* Smooth transitions for cards and containers */
+.card-transition {
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Background pattern transitions */
+.bg-pattern-transition {
+  transition: background-image 1s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Icon and image transitions */
+svg, img {
+  transition: filter 1s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Progress bar transitions */
+.progress-transition {
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Badge and status indicator transitions */
+.badge-transition {
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
