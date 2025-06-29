@@ -173,23 +173,25 @@ All colors MUST be HSL.
   mix-blend-mode: screen; /* Blend mode for better visibility */
 }
 
-/* Blue glow cursor - Light mode (visible and vibrant) */
+/* Bright blue glow cursor - Light mode (highly visible and vibrant) */
 .cursor-glow-light {
   background: radial-gradient(circle, 
-    rgba(59, 130, 246, 1) 0%,       /* Bright blue center */
-    rgba(59, 130, 246, 0.8) 25%,    /* Medium blue */
-    rgba(59, 130, 246, 0.5) 50%,    /* Light blue */
-    rgba(59, 130, 246, 0.2) 75%,    /* Very light blue */
+    rgba(37, 99, 235, 1) 0%,        /* Bright blue-600 center for maximum visibility */
+    rgba(37, 99, 235, 0.9) 20%,     /* Strong blue */
+    rgba(59, 130, 246, 0.8) 40%,    /* Medium blue-500 */
+    rgba(59, 130, 246, 0.6) 60%,    /* Light blue */
+    rgba(59, 130, 246, 0.3) 80%,    /* Very light blue */
     transparent 100%
   );
   box-shadow: 
-    0 0 12px rgba(59, 130, 246, 0.7),
-    0 0 24px rgba(59, 130, 246, 0.5),
-    0 0 36px rgba(59, 130, 246, 0.3),
-    0 0 48px rgba(59, 130, 246, 0.2);
+    0 0 15px rgba(37, 99, 235, 0.9),   /* Strong inner glow */
+    0 0 30px rgba(37, 99, 235, 0.7),   /* Medium glow */
+    0 0 45px rgba(59, 130, 246, 0.5),  /* Outer glow */
+    0 0 60px rgba(59, 130, 246, 0.3);  /* Far glow */
+  border: 2px solid rgba(37, 99, 235, 0.8); /* Blue border for definition */
 }
 
-/* Black glow cursor - Dark mode (highly visible) */
+/* Black glow cursor - Dark mode (highly visible with white border) */
 .cursor-glow-dark {
   background: radial-gradient(circle, 
     rgba(0, 0, 0, 1) 0%,           /* Black center for high contrast */

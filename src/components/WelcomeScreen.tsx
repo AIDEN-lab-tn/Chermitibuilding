@@ -197,20 +197,6 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
           Powered by cutting-edge 3D technology
         </p>
       </div>
-
-      {/* Corner decorations - INSTANT color changes */}
-      <div className={`absolute top-8 left-8 w-20 h-20 border-l-2 border-t-2 instant-theme-transition ${
-        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-600/40'
-      }`} />
-      <div className={`absolute top-8 right-8 w-20 h-20 border-r-2 border-t-2 instant-theme-transition ${
-        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-600/40'
-      }`} />
-      <div className={`absolute bottom-8 left-8 w-20 h-20 border-l-2 border-b-2 instant-theme-transition ${
-        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-600/40'
-      }`} />
-      <div className={`absolute bottom-8 right-8 w-20 h-20 border-r-2 border-b-2 instant-theme-transition ${
-        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-600/40'
-      }`} />
     </div>
   );
 };
