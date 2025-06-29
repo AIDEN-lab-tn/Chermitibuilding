@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,7 +24,15 @@ import {
   AlertTriangle,
   Info,
   Sun,
-  Moon
+  Moon,
+  CreditCard,
+  FileText,
+  TrendingUp,
+  Download,
+  Eye,
+  DollarSign,
+  Calendar as CalendarIcon,
+  Target
 } from 'lucide-react';
 import logo from '/public/logo.png';
 
@@ -105,6 +114,55 @@ const ResidentDashboardContent = () => {
     }
   ];
 
+  // Progress tracking data
+  const progressData = {
+    overall: 75,
+    phases: [
+      { name: 'Foundation', progress: 100, status: 'completed' },
+      { name: 'Structure', progress: 100, status: 'completed' },
+      { name: 'Interior Work', progress: 85, status: 'in-progress' },
+      { name: 'Finishing', progress: 45, status: 'in-progress' },
+      { name: 'Final Inspection', progress: 0, status: 'pending' }
+    ],
+    milestones: [
+      { date: '2024-01-15', title: 'Construction Started', completed: true },
+      { date: '2024-06-20', title: 'Structure Completed', completed: true },
+      { date: '2024-11-30', title: 'Interior 80% Complete', completed: true },
+      { date: '2025-03-15', title: 'Expected Completion', completed: false },
+      { date: '2025-04-01', title: 'Move-in Ready', completed: false }
+    ]
+  };
+
+  // Payment data
+  const paymentData = {
+    totalAmount: 850000,
+    paidAmount: 637500,
+    remainingAmount: 212500,
+    nextPayment: {
+      amount: 42500,
+      dueDate: '2025-01-15'
+    },
+    paymentHistory: [
+      { date: '2024-01-15', amount: 170000, type: 'Down Payment', status: 'paid' },
+      { date: '2024-04-15', amount: 85000, type: 'Quarterly Payment', status: 'paid' },
+      { date: '2024-07-15', amount: 85000, type: 'Quarterly Payment', status: 'paid' },
+      { date: '2024-10-15', amount: 85000, type: 'Quarterly Payment', status: 'paid' },
+      { date: '2024-12-15', amount: 212500, type: 'Progress Payment', status: 'paid' },
+      { date: '2025-01-15', amount: 42500, type: 'Quarterly Payment', status: 'pending' },
+      { date: '2025-04-15', amount: 170000, type: 'Final Payment', status: 'pending' }
+    ]
+  };
+
+  // Documents data
+  const documentsData = [
+    { id: 1, name: 'Purchase Agreement', type: 'Contract', date: '2024-01-15', size: '2.4 MB' },
+    { id: 2, name: 'Floor Plans - Unit A-2501', type: 'Blueprint', date: '2024-01-20', size: '5.1 MB' },
+    { id: 3, name: 'Building Specifications', type: 'Technical', date: '2024-02-01', size: '8.7 MB' },
+    { id: 4, name: 'Interior Design Options', type: 'Design', date: '2024-02-15', size: '12.3 MB' },
+    { id: 5, name: 'Payment Schedule', type: 'Financial', date: '2024-01-15', size: '1.2 MB' },
+    { id: 6, name: 'Building Amenities Guide', type: 'Information', date: '2024-03-01', size: '6.8 MB' }
+  ];
+
   const getStatusIcon = (type: string) => {
     switch (type) {
       case 'maintenance': return <Settings className="h-4 w-4" />;
@@ -123,6 +181,13 @@ const ResidentDashboardContent = () => {
     }
   };
 
+  const getProgressColor = (progress: number) => {
+    if (progress === 100) return 'bg-green-500';
+    if (progress >= 50) return 'bg-blue-500';
+    if (progress > 0) return 'bg-yellow-500';
+    return 'bg-gray-300';
+  };
+
   const handleSupportSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     alert('Support request submitted successfully! We will get back to you within 24 hours.');
@@ -134,9 +199,9 @@ const ResidentDashboardContent = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-blue-200 to-blue-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className={`min-h-screen ${theme === 'dark' ? 'gradient-bg-dark' : 'gradient-bg-light'}`}>
       {/* Header */}
-      <div className="bg-white/80 dark:bg-gray-900/90 backdrop-blur-md shadow-lg border-b border-blue-200 dark:border-gray-800">
+      <div className="bg-white/80 dark:bg-gray-900/90 glass-effect shadow-lg border-b border-blue-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
@@ -170,7 +235,7 @@ const ResidentDashboardContent = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar Navigation */}
           <div className="lg:col-span-1">
-            <Card className="bg-white/80 dark:bg-black/80 backdrop-blur-lg border-blue-200 dark:border-gray-600 shadow-xl">
+            <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2 text-gray-800 dark:text-white">
                   <User className="h-5 w-5" />
@@ -185,6 +250,30 @@ const ResidentDashboardContent = () => {
                 >
                   <Home className="h-4 w-4 mr-2" />
                   Overview
+                </Button>
+                <Button
+                  variant={activeTab === 'progress' ? 'default' : 'ghost'}
+                  className={`w-full justify-start ${activeTab === 'progress' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  onClick={() => setActiveTab('progress')}
+                >
+                  <Target className="h-4 w-4 mr-2" />
+                  Progress Tracker
+                </Button>
+                <Button
+                  variant={activeTab === 'payments' ? 'default' : 'ghost'}
+                  className={`w-full justify-start ${activeTab === 'payments' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  onClick={() => setActiveTab('payments')}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Payments
+                </Button>
+                <Button
+                  variant={activeTab === 'documents' ? 'default' : 'ghost'}
+                  className={`w-full justify-start ${activeTab === 'documents' ? 'bg-blue-600 text-white' : 'text-gray-800 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700/50'}`}
+                  onClick={() => setActiveTab('documents')}
+                >
+                  <FileText className="h-4 w-4 mr-2" />
+                  Documents
                 </Button>
                 <Button
                   variant={activeTab === 'updates' ? 'default' : 'ghost'}
@@ -214,7 +303,7 @@ const ResidentDashboardContent = () => {
             </Card>
 
             {/* Apartment Info */}
-            <Card className="bg-white/80 dark:bg-black/80 backdrop-blur-lg border-blue-200 dark:border-gray-600 shadow-xl mt-6">
+            <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl mt-6">
               <CardHeader>
                 <CardTitle className="text-lg text-gray-800 dark:text-white">Your Apartment</CardTitle>
               </CardHeader>
@@ -243,31 +332,272 @@ const ResidentDashboardContent = () => {
           <div className="lg:col-span-3">
             {activeTab === 'overview' && (
               <div className="space-y-6">
-                <Card className="bg-white/80 dark:bg-black/80 backdrop-blur-lg border-blue-200 dark:border-gray-600 shadow-xl">
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Construction Progress</p>
+                          <p className="text-2xl font-bold text-gray-900 dark:text-white">{progressData.overall}%</p>
+                        </div>
+                        <Target className="h-8 w-8 text-blue-600" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Amount Paid</p>
+                          <p className="text-2xl font-bold text-gray-900 dark:text-white">${(paymentData.paidAmount / 1000).toFixed(0)}K</p>
+                        </div>
+                        <DollarSign className="h-8 w-8 text-green-600" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Next Payment</p>
+                          <p className="text-2xl font-bold text-gray-900 dark:text-white">${(paymentData.nextPayment.amount / 1000).toFixed(0)}K</p>
+                        </div>
+                        <CalendarIcon className="h-8 w-8 text-orange-600" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Quick Overview */}
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
                   <CardHeader>
                     <CardTitle className="text-gray-900 dark:text-white">Welcome to Your Dashboard</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-600 dark:text-gray-400 mb-4">
-                      Stay connected with your luxury residence. Here you can view the latest updates, 
-                      read important announcements, and contact our support team whenever you need assistance.
+                      Stay connected with your luxury residence. Here you can track construction progress, 
+                      manage payments, access important documents, and stay updated with the latest announcements.
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                       <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                        <Bell className="h-8 w-8 text-blue-600 mb-2" />
-                        <h3 className="font-semibold text-gray-900 dark:text-white">Latest Updates</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">3 new updates available</p>
+                        <Target className="h-8 w-8 text-blue-600 mb-2" />
+                        <h3 className="font-semibold text-gray-900 dark:text-white">Progress</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Track construction</p>
                       </div>
                       <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                        <Calendar className="h-8 w-8 text-green-600 mb-2" />
-                        <h3 className="font-semibold text-gray-900 dark:text-white">Announcements</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">2 important notices</p>
+                        <CreditCard className="h-8 w-8 text-green-600 mb-2" />
+                        <h3 className="font-semibold text-gray-900 dark:text-white">Payments</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Manage finances</p>
                       </div>
                       <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                        <MessageSquare className="h-8 w-8 text-purple-600 mb-2" />
-                        <h3 className="font-semibold text-gray-900 dark:text-white">Support</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">24/7 assistance available</p>
+                        <FileText className="h-8 w-8 text-purple-600 mb-2" />
+                        <h3 className="font-semibold text-gray-900 dark:text-white">Documents</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Access files</p>
                       </div>
+                      <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
+                        <Bell className="h-8 w-8 text-orange-600 mb-2" />
+                        <h3 className="font-semibold text-gray-900 dark:text-white">Updates</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Latest news</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {activeTab === 'progress' && (
+              <div className="space-y-6">
+                {/* Overall Progress */}
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                  <CardHeader>
+                    <CardTitle className="text-gray-900 dark:text-white">Construction Progress</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="mb-6">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-lg font-semibold text-gray-900 dark:text-white">Overall Progress</span>
+                        <span className="text-2xl font-bold text-blue-600">{progressData.overall}%</span>
+                      </div>
+                      <Progress value={progressData.overall} className="h-3" />
+                    </div>
+
+                    {/* Phase Progress */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Construction Phases</h3>
+                      {progressData.phases.map((phase, index) => (
+                        <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="font-medium text-gray-900 dark:text-white">{phase.name}</span>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-sm font-semibold">{phase.progress}%</span>
+                              <Badge className={
+                                phase.status === 'completed' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' :
+                                phase.status === 'in-progress' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' :
+                                'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                              }>
+                                {phase.status}
+                              </Badge>
+                            </div>
+                          </div>
+                          <Progress value={phase.progress} className="h-2" />
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Milestones */}
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                  <CardHeader>
+                    <CardTitle className="text-gray-900 dark:text-white">Project Milestones</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {progressData.milestones.map((milestone, index) => (
+                        <div key={index} className="flex items-center space-x-4">
+                          <div className={`w-4 h-4 rounded-full ${milestone.completed ? 'bg-green-500' : 'bg-gray-300'}`} />
+                          <div className="flex-1">
+                            <div className="flex justify-between items-center">
+                              <span className={`font-medium ${milestone.completed ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+                                {milestone.title}
+                              </span>
+                              <span className="text-sm text-gray-500 dark:text-gray-400">{milestone.date}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {activeTab === 'payments' && (
+              <div className="space-y-6">
+                {/* Payment Summary */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                    <CardContent className="p-6">
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Total Amount</p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white">${paymentData.totalAmount.toLocaleString()}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                    <CardContent className="p-6">
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Amount Paid</p>
+                        <p className="text-2xl font-bold text-green-600">${paymentData.paidAmount.toLocaleString()}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                    <CardContent className="p-6">
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Remaining</p>
+                        <p className="text-2xl font-bold text-orange-600">${paymentData.remainingAmount.toLocaleString()}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Payment Progress */}
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                  <CardHeader>
+                    <CardTitle className="text-gray-900 dark:text-white">Payment Progress</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="mb-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm text-gray-600 dark:text-gray-400">Payment Completion</span>
+                        <span className="text-sm font-semibold">{Math.round((paymentData.paidAmount / paymentData.totalAmount) * 100)}%</span>
+                      </div>
+                      <Progress value={(paymentData.paidAmount / paymentData.totalAmount) * 100} className="h-3" />
+                    </div>
+                    
+                    {/* Next Payment */}
+                    <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Next Payment Due</h3>
+                      <div className="flex justify-between items-center">
+                        <span className="text-lg font-bold text-orange-600">${paymentData.nextPayment.amount.toLocaleString()}</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">Due: {paymentData.nextPayment.dueDate}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Payment History */}
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                  <CardHeader>
+                    <CardTitle className="text-gray-900 dark:text-white">Payment History</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b border-gray-200 dark:border-gray-700">
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Date</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Type</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Amount</th>
+                            <th className="text-left p-3 text-gray-900 dark:text-white">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {paymentData.paymentHistory.map((payment, index) => (
+                            <tr key={index} className="border-b border-gray-100 dark:border-gray-800">
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{payment.date}</td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">{payment.type}</td>
+                              <td className="p-3 text-gray-800 dark:text-gray-300">${payment.amount.toLocaleString()}</td>
+                              <td className="p-3">
+                                <Badge className={payment.status === 'paid' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300'}>
+                                  {payment.status}
+                                </Badge>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {activeTab === 'documents' && (
+              <div className="space-y-6">
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
+                  <CardHeader>
+                    <CardTitle className="text-gray-900 dark:text-white">Document Library</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {documentsData.map((doc) => (
+                        <div key={doc.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-start space-x-3">
+                              <FileText className="h-8 w-8 text-blue-600 mt-1" />
+                              <div>
+                                <h3 className="font-semibold text-gray-900 dark:text-white">{doc.name}</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{doc.type}</p>
+                                <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500">
+                                  <span>{doc.date}</span>
+                                  <span>{doc.size}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex space-x-2">
+                              <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600">
+                                <Eye className="h-3 w-3" />
+                              </Button>
+                              <Button size="sm" variant="outline" className="border-blue-200 dark:border-gray-600">
+                                <Download className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
@@ -276,7 +606,7 @@ const ResidentDashboardContent = () => {
 
             {activeTab === 'updates' && (
               <div className="space-y-6">
-                <Card className="bg-white/80 dark:bg-black/80 backdrop-blur-lg border-blue-200 dark:border-gray-600 shadow-xl">
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
                   <CardHeader>
                     <CardTitle className="text-gray-900 dark:text-white">Apartment Updates</CardTitle>
                   </CardHeader>
@@ -312,7 +642,7 @@ const ResidentDashboardContent = () => {
 
             {activeTab === 'announcements' && (
               <div className="space-y-6">
-                <Card className="bg-white/80 dark:bg-black/80 backdrop-blur-lg border-blue-200 dark:border-gray-600 shadow-xl">
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
                   <CardHeader>
                     <CardTitle className="text-gray-900 dark:text-white">Building Announcements</CardTitle>
                   </CardHeader>
@@ -343,7 +673,7 @@ const ResidentDashboardContent = () => {
 
             {activeTab === 'support' && (
               <div className="space-y-6">
-                <Card className="bg-white/80 dark:bg-black/80 backdrop-blur-lg border-blue-200 dark:border-gray-600 shadow-xl">
+                <Card className="bg-white/80 dark:bg-black/80 glass-effect border-blue-200 dark:border-gray-600 shadow-xl">
                   <CardHeader>
                     <CardTitle className="text-gray-900 dark:text-white">Contact Support</CardTitle>
                   </CardHeader>

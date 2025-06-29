@@ -22,8 +22,8 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
   return (
     <div className={`fixed inset-0 z-50 transition-all duration-1000 ${
       theme === 'dark' 
-        ? 'bg-gradient-to-br from-gray-900 via-slate-800 to-black' 
-        : 'bg-gradient-to-br from-blue-50 via-white to-blue-100'
+        ? 'gradient-bg-dark' 
+        : 'gradient-bg-light'
     } flex items-center justify-center overflow-hidden`}>
       
       {/* Animated background elements */}
@@ -33,7 +33,7 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
           <div
             key={i}
             className={`absolute w-2 h-2 rounded-full animate-pulse ${
-              theme === 'dark' ? 'bg-blue-400/20' : 'bg-blue-500/20'
+              theme === 'dark' ? 'bg-blue-400/20' : 'bg-blue-600/30'
             }`}
             style={{
               left: `${Math.random() * 100}%`,
@@ -79,13 +79,8 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
 
         {/* Welcome text */}
         <div className="mb-12">
-          <h1 className={`text-5xl md:text-6xl font-light mb-4 tracking-wider ${
-            theme === 'dark' ? 'text-white' : 'text-gray-900'
-          }`}>
-            Welcome to
-          </h1>
           <h2 className={`text-3xl md:text-4xl font-bold mb-6 tracking-wide ${
-            theme === 'dark' ? 'text-blue-300' : 'text-blue-600'
+            theme === 'dark' ? 'text-blue-300' : 'text-blue-700'
           }`}>
             CHERMITI BUILDING
           </h2>
@@ -94,7 +89,7 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
           <div className={`w-48 h-px mx-auto mb-6 ${
             theme === 'dark' 
               ? 'bg-gradient-to-r from-transparent via-blue-400 to-transparent' 
-              : 'bg-gradient-to-r from-transparent via-blue-500 to-transparent'
+              : 'bg-gradient-to-r from-transparent via-blue-600 to-transparent'
           }`} />
           
           <p className={`text-lg md:text-xl font-light leading-relaxed ${
@@ -107,7 +102,7 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
         </div>
 
         {/* Theme selection notice */}
-        <div className={`mb-10 p-6 rounded-2xl backdrop-blur-md border ${
+        <div className={`mb-10 p-6 rounded-2xl glass-effect border ${
           theme === 'dark' 
             ? 'bg-white/5 border-blue-400/20' 
             : 'bg-white/60 border-blue-300/30'
@@ -196,25 +191,25 @@ export const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
 
       {/* Corner decorations */}
       <div className={`absolute top-8 left-8 w-20 h-20 border-l-2 border-t-2 ${
-        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-500/40'
+        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-600/40'
       }`} />
       <div className={`absolute top-8 right-8 w-20 h-20 border-r-2 border-t-2 ${
-        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-500/40'
+        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-600/40'
       }`} />
       <div className={`absolute bottom-8 left-8 w-20 h-20 border-l-2 border-b-2 ${
-        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-500/40'
+        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-600/40'
       }`} />
       <div className={`absolute bottom-8 right-8 w-20 h-20 border-r-2 border-b-2 ${
-        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-500/40'
+        theme === 'dark' ? 'border-blue-400/30' : 'border-blue-600/40'
       }`} />
 
       {/* Exit animation overlay */}
       {isStarting && (
-        <div className={`absolute inset-0 transition-opacity duration-800 ${
+        <div className={`absolute inset-0 transition-opacity duration-800 animate-pulse opacity-0 ${
           theme === 'dark' 
-            ? 'bg-gradient-to-br from-gray-900 via-slate-800 to-black' 
-            : 'bg-gradient-to-br from-blue-50 via-white to-blue-100'
-        } opacity-0 animate-pulse`} />
+            ? 'gradient-bg-dark' 
+            : 'gradient-bg-light'
+        }`} />
       )}
     </div>
   );
